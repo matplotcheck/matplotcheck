@@ -1,6 +1,11 @@
 [![DOI](https://zenodo.org/badge/138660604.svg)](https://zenodo.org/badge/latestdoi/138660604)
 
 # MatPlotCheck
+
+> [!IMPORTANT]
+> MatPlotCheck is no longer being maintained by Earth Lab. You can view the currently maintained fork of this project at [matplotcheck/matplotcheck](https://github.com/matplotcheck/matplotcheck).
+> Thanks to all the contributors who have helped make this project a success, especially Jess Hamrick, Leah Wasser, and Nathan Korinek.
+
 ![PyPI](https://img.shields.io/pypi/v/matplotcheck.svg?color=purple&style=plastic)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/matplotcheck.svg?color=purple&label=pypi%20downloads&style=plastic)
 ![Conda](https://img.shields.io/conda/v/conda-forge/matplotcheck.svg?color=purple&style=plastic)

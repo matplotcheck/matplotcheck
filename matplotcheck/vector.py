@@ -82,7 +82,8 @@ class VectorTester(PlotTester):
                 self._convert_length(sizes, n),
                 self._convert_length(styles, n),
             )
-            points_dataframe = points_dataframe.append(
+            points_dataframe = pd.concat([
+                points_dataframe,
                 pd.DataFrame(
                     {
                         "offset": offsets,
@@ -90,7 +91,8 @@ class VectorTester(PlotTester):
                         "msize": sizes,
                         "mstyle": styles,
                     }
-                ),
+                )
+            ],
                 ignore_index=True,
             )
 
@@ -150,12 +152,12 @@ class VectorTester(PlotTester):
                     df2 = pd.DataFrame(
                         {"x": x_data, "y": y_data, "markersize": markersize}
                     )
-                    df = df.append(df2)
+                    df = pd.concat([df, df2], ignore_index=True)
                 elif len(markersizes) == len(offsets):
                     df2 = pd.DataFrame(
                         {"x": x_data, "y": y_data, "markersize": markersizes}
                     )
-                    df = df.append(df2)
+                    df = pd.concat([df, df2], ignore_index=True)
         df = df.sort_values(by="markersize").reset_index(drop=True)
         return df
 
@@ -283,7 +285,9 @@ class VectorTester(PlotTester):
                 for j in range(1, len(seg)):
                     new_row = row.copy()
                     new_row[column_title] = list(seg[j].coords)
-                    dfout = dfout.append(new_row).reset_index(drop=True)
+
+                    dfout = pd.concat([dfout, new_row], ignore_index=True)
+                    dfout.reset_index(drop=True)
             else:
                 raise ValueError(
                     "Segment is not of either expected type: MultiLinestring, "
@@ -372,15 +376,18 @@ class VectorTester(PlotTester):
                 self._convert_length(widths, n),
                 self._convert_length(styles, n),
             )
-            lines_dataframe = lines_dataframe.append(
-                pd.DataFrame(
-                    {
-                        "seg": segs,
-                        "color": colors,
-                        "lwidth": widths,
-                        "lstyle": styles,
-                    }
-                ),
+            lines_dataframe = pd.concat(
+                [
+                    lines_dataframe,
+                    pd.DataFrame(
+                        {
+                            "seg": segs,
+                            "color": colors,
+                            "lwidth": widths,
+                            "lstyle": styles,
+                        }
+                    ),
+                ],
                 ignore_index=True,
             )
 

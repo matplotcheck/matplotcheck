@@ -90,7 +90,7 @@ def test_assert_xydata_scatter(pt_scatter_plt, pd_df):
 def test_assert_xydata_tolerance(pt_scatter_plt, pd_df):
     """Checks that slightly altered data still passes with an appropriate
     tolerence"""
-    pd_df = pd_df.astype(np.float)
+    pd_df = pd_df.astype(float)
     for i in range(len(pd_df["A"])):
         pd_df["A"][i] = pd_df["A"][i] + np.random.choice([-0.1, 0.1])
         pd_df["B"][i] = pd_df["B"][i] + np.random.choice([-0.1, 0.1])

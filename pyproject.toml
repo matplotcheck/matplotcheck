@@ -1,2 +1,18 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "matplotcheck"
+readme = "README.md"
+requires-python = ">=3.6"
+dynamic = ["dependencies", "maintainers", "classifiers", "urls", "description", "version"]
+
 [tool.black]
 line-length = 79
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0.1",
+    "seaborn>=0.11.2",
+]

@@ -95,21 +95,15 @@ class PlotBasicSuite(object):
 
             @unittest.skipIf(title_contains is None, "Skip title test")
             def test_title_exist(self):
-                self.pt.assert_title_contains(
-                    lst=title_contains, title_type=title_type
-                )
+                self.pt.assert_title_contains(lst=title_contains, title_type=title_type)
 
             @unittest.skipIf(xlabel_contains is None, "Skip x axis label test")
             def test_xlab_exist(self):
-                self.pt.assert_axis_label_contains(
-                    axis="x", lst=xlabel_contains
-                )
+                self.pt.assert_axis_label_contains(axis="x", lst=xlabel_contains)
 
             @unittest.skipIf(ylabel_contains is None, "Skip y axis label test")
             def test_ylab_exist(self):
-                self.pt.assert_axis_label_contains(
-                    axis="y", lst=ylabel_contains
-                )
+                self.pt.assert_axis_label_contains(axis="y", lst=ylabel_contains)
 
             def tearDown(self):
                 self.pt = None
@@ -182,15 +176,11 @@ class PlotBasicSuite(object):
                     xlabels=xlabels,
                 )
 
-            @unittest.skipIf(
-                line_types is None, "No additional lines requested"
-            )
+            @unittest.skipIf(line_types is None, "No additional lines requested")
             def test_lines(self):
                 self.pt.assert_lines_of_type(line_types=line_types)
 
-            @unittest.skipIf(
-                plot_type is None, "No specific plot type requested"
-            )
+            @unittest.skipIf(plot_type is None, "No specific plot type requested")
             def test_plot_type(self):
                 self.pt.assert_plot_type(plot_type=plot_type)
 
@@ -301,15 +291,11 @@ class PlotHistogramSuite(PlotBasicSuite):
             def setUp(self):
                 self.pt = PlotTester(ax)
 
-            @unittest.skipIf(
-                n_bins is None, "No specified number of bins required"
-            )
+            @unittest.skipIf(n_bins is None, "No specified number of bins required")
             def test_num_neg_bins(self):
                 self.pt.assert_num_bins(n=n_bins[0], which_bins="negative")
 
-            @unittest.skipIf(
-                n_bins is None, "No specified number of bins required"
-            )
+            @unittest.skipIf(n_bins is None, "No specified number of bins required")
             def test_num_pos_bins(self):
                 self.pt.assert_num_bins(n=n_bins[1], which_bins="positive")
 
@@ -417,9 +403,7 @@ class PlotTimeSeriesSuite(PlotBasicSuite):
             def setUp(self):
                 self.tst = TimeSeriesTester(ax)
 
-            @unittest.skipIf(
-                major_locator_exp is None, "No expected large tick format"
-            )
+            @unittest.skipIf(major_locator_exp is None, "No expected large tick format")
             def test_x_major_formatter(self):
                 self.tst.assert_xticks_reformatted(
                     tick_size="large", loc_exp=major_locator_exp
@@ -455,9 +439,7 @@ class PlotTimeSeriesSuite(PlotBasicSuite):
             def setUp(self):
                 self.tst = TimeSeriesTester(ax)
 
-            @unittest.skipIf(
-                no_data_val is None, "No data value not specified"
-            )
+            @unittest.skipIf(no_data_val is None, "No data value not specified")
             def test_yna_vals(self):
                 self.tst.assert_no_data_value(nodata=no_data_val)
 
@@ -598,9 +580,7 @@ class PlotVectorSuite(PlotBasicSuite):
                     df_expected=markers, sort_column=markers_by_size
                 )
 
-            @unittest.skipIf(
-                markers_groupby is None, "No expected marker groupby"
-            )
+            @unittest.skipIf(markers_groupby is None, "No expected marker groupby")
             def test_markers_grouped(self):
                 if markers_groupby:
                     self.vt.assert_points_grouped_by_type(
@@ -611,9 +591,7 @@ class PlotVectorSuite(PlotBasicSuite):
             def test_lines_location(self):
                 self.vt.assert_lines(lines_expected=lines)
 
-            @unittest.skipIf(
-                lines_groupby is None, "No expected lines groupby"
-            )
+            @unittest.skipIf(lines_groupby is None, "No expected lines groupby")
             def test_lines_grouped(self):
                 if lines_groupby:
                     self.vt.assert_lines_grouped_by_type(
@@ -763,9 +741,7 @@ class PlotRasterSuite(PlotVectorSuite):
             def test_image_mask(self):
                 pass
 
-            @unittest.skipIf(
-                not im_classified, "Image not expected to be classified"
-            )
+            @unittest.skipIf(not im_classified, "Image not expected to be classified")
             def test_legend_accuracy(self):
                 self.rt.assert_legend_accuracy_classified_image(
                     im_expected=im_expected, all_label_options=legend_labels
@@ -850,5 +826,5 @@ class PlotFoliumSuite(object):
 
     @property
     def suite(self):
-        """ Returns a Testsuite from cases to be run in a TestRunner"""
+        """Returns a Testsuite from cases to be run in a TestRunner"""
         return loadTests(self.cases)

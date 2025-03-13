@@ -60,13 +60,11 @@ class VectorTester(PlotTester):
         sorted list where each list represents all points with the same color.
         each point is represented by a tuple with its coordinates.
         """
-        points_dataframe = pd.DataFrame(
-            columns=["offset", "color", "msize", "mstyle"]
-        )
+        points_dataframe = pd.DataFrame(columns=["offset", "color", "msize", "mstyle"])
         for c in (
             coll
             for coll in self.ax.collections
-            if type(coll) == matplotlib.collections.PathCollection
+            if isinstance(coll, matplotlib.collections.PathCollection)
         ):
             colors, sizes = (
                 [tuple(color) for color in c.get_facecolors()],
@@ -82,15 +80,18 @@ class VectorTester(PlotTester):
                 self._convert_length(sizes, n),
                 self._convert_length(styles, n),
             )
-            points_dataframe = points_dataframe.append(
-                pd.DataFrame(
-                    {
-                        "offset": offsets,
-                        "color": colors,
-                        "msize": sizes,
-                        "mstyle": styles,
-                    }
-                ),
+            points_dataframe = pd.concat(
+                [
+                    points_dataframe,
+                    pd.DataFrame(
+                        {
+                            "offset": offsets,
+                            "color": colors,
+                            "msize": sizes,
+                            "mstyle": styles,
+                        }
+                    ),
+                ],
                 ignore_index=True,
             )
 
@@ -125,9 +126,7 @@ class VectorTester(PlotTester):
             [(data.geometry[i].x, data.geometry[i].y) for i in data.index]
             for c, data in data_exp.groupby([sort_column], sort=False)
         ]
-        np.testing.assert_equal(
-            groups, sorted([sorted(p) for p in grouped_exp]), m
-        )
+        np.testing.assert_equal(groups, sorted([sorted(p) for p in grouped_exp]), m)
 
     def sort_collection_by_markersize(self):
         """Returns a pandas dataframe of points in collections on Axes ax.
@@ -150,12 +149,12 @@ class VectorTester(PlotTester):
                     df2 = pd.DataFrame(
                         {"x": x_data, "y": y_data, "markersize": markersize}
                     )
-                    df = df.append(df2)
+                    df = pd.concat([df, df2], ignore_index=True)
                 elif len(markersizes) == len(offsets):
                     df2 = pd.DataFrame(
                         {"x": x_data, "y": y_data, "markersize": markersizes}
                     )
-                    df = df.append(df2)
+                    df = pd.concat([df, df2], ignore_index=True)
         df = df.sort_values(by="markersize").reset_index(drop=True)
         return df
 
@@ -172,9 +171,7 @@ class VectorTester(PlotTester):
             if None, assertion is passed
         """
         df = self.sort_collection_by_markersize()
-        df_expected = df_expected.sort_values(by=sort_column).reset_index(
-            drop=True
-        )
+        df_expected = df_expected.sort_values(by=sort_column).reset_index(drop=True)
         np.testing.assert_almost_equal(
             np.array(df.x),
             np.array([p.x for p in df_expected.geometry]),
@@ -226,13 +223,9 @@ class VectorTester(PlotTester):
                 # returned from self.get_points and removes them.
                 points_zeros = (points["x"] == 0) & (points["y"] == 0)
                 if points_zeros.any():
-                    expected_zeros = (xy_expected["x"] == 0) & (
-                        xy_expected["y"] == 0
-                    )
+                    expected_zeros = (xy_expected["x"] == 0) & (xy_expected["y"] == 0)
                     keep = expected_zeros.sum()
-                    zeros_index_vals = points_zeros.index[
-                        points_zeros.tolist()
-                    ]
+                    zeros_index_vals = points_zeros.index[points_zeros.tolist()]
                     for i in range(keep):
                         points_zeros.at[zeros_index_vals[i]] = False
                     points = points[~points_zeros].reset_index(drop=True)
@@ -246,9 +239,7 @@ class VectorTester(PlotTester):
             except AssertionError:
                 raise AssertionError(m)
         else:
-            raise ValueError(
-                "points_expected is not expected type: GeoDataFrame"
-            )
+            raise ValueError("points_expected is not expected type: GeoDataFrame")
 
     # Lines
 
@@ -276,14 +267,16 @@ class VectorTester(PlotTester):
         dfout = df.copy()
         for i, row in dfout.iterrows():
             seg = row[column_title]
-            if type(seg) == shapely.geometry.linestring.LineString:
+            if isinstance(seg, shapely.geometry.linestring.LineString):
                 dfout.at[i, column_title] = list(seg.coords)
-            elif type(seg) == shapely.geometry.multilinestring.MultiLineString:
+            elif isinstance(seg, shapely.geometry.multilinestring.MultiLineString):
                 dfout.at[i, column_title] = list(seg[0].coords)
                 for j in range(1, len(seg)):
                     new_row = row.copy()
                     new_row[column_title] = list(seg[j].coords)
-                    dfout = dfout.append(new_row).reset_index(drop=True)
+
+                    dfout = pd.concat([dfout, new_row], ignore_index=True)
+                    dfout.reset_index(drop=True)
             else:
                 raise ValueError(
                     "Segment is not of either expected type: MultiLinestring, "
@@ -321,7 +314,7 @@ class VectorTester(PlotTester):
         lines = [
             [tuple(coords) for coords in seg]
             for c in self.ax.collections
-            if type(c) == matplotlib.collections.LineCollection
+            if isinstance(c, matplotlib.collections.LineCollection)
             for seg in c.get_segments()
         ]
         return pd.DataFrame({"lines": lines})
@@ -338,7 +331,7 @@ class VectorTester(PlotTester):
         lines_grouped = [
             [[tuple(coords) for coords in seg] for seg in c.get_segments()]
             for c in self.ax.collections
-            if type(c) == matplotlib.collections.LineCollection
+            if isinstance(c, matplotlib.collections.LineCollection)
         ]
         return sorted([sorted(lines) for lines in lines_grouped])
 
@@ -352,13 +345,11 @@ class VectorTester(PlotTester):
         sorted list where each list represents all lines with the same
         attributes
         """
-        lines_dataframe = pd.DataFrame(
-            columns=["seg", "color", "lwidth", "lstyle"]
-        )
+        lines_dataframe = pd.DataFrame(columns=["seg", "color", "lwidth", "lstyle"])
         for c in (
             coll
             for coll in self.ax.collections
-            if type(coll) == matplotlib.collections.LineCollection
+            if isinstance(coll, matplotlib.collections.LineCollection)
         ):
             segs = [[tuple(coords) for coords in s] for s in c.get_segments()]
             colors, widths, styles = (
@@ -372,15 +363,18 @@ class VectorTester(PlotTester):
                 self._convert_length(widths, n),
                 self._convert_length(styles, n),
             )
-            lines_dataframe = lines_dataframe.append(
-                pd.DataFrame(
-                    {
-                        "seg": segs,
-                        "color": colors,
-                        "lwidth": widths,
-                        "lstyle": styles,
-                    }
-                ),
+            lines_dataframe = pd.concat(
+                [
+                    lines_dataframe,
+                    pd.DataFrame(
+                        {
+                            "seg": segs,
+                            "color": colors,
+                            "lwidth": widths,
+                            "lstyle": styles,
+                        }
+                    ),
+                ],
                 ignore_index=True,
             )
 
@@ -403,7 +397,7 @@ class VectorTester(PlotTester):
         of MultilineString and LineString objects
         m: string error message if assertion is not met
         """
-        if type(lines_expected) == gpd.geodataframe.GeoDataFrame:
+        if isinstance(lines_expected, gpd.geodataframe.GeoDataFrame):
             lines_expected = lines_expected[
                 ~lines_expected["geometry"].is_empty
             ].reset_index(drop=True)
@@ -417,9 +411,7 @@ class VectorTester(PlotTester):
         elif not lines_expected:
             pass
         else:
-            raise ValueError(
-                "lines_expected is not expected type: GeoDataFrame"
-            )
+            raise ValueError("lines_expected is not expected type: GeoDataFrame")
 
     def assert_lines_grouped_by_type(
         self,
@@ -439,7 +431,7 @@ class VectorTester(PlotTester):
         types lines are expected to be grouped by
         m: string error message if assertion is not met
         """
-        if type(lines_expected) == gpd.geodataframe.GeoDataFrame:
+        if isinstance(lines_expected, gpd.geodataframe.GeoDataFrame):
             groups = self.get_lines_by_attributes()
             lines_expected = lines_expected[
                 ~lines_expected["geometry"].is_empty
@@ -450,7 +442,7 @@ class VectorTester(PlotTester):
             grouped_exp = [
                 [[tuple(coords) for coords in seg] for seg in c.get_segments()]
                 for c in ax_exp.collections
-                if type(c) == matplotlib.collections.LineCollection
+                if isinstance(c, matplotlib.collections.LineCollection)
             ]
             grouped_exp = sorted([sorted(lines) for lines in grouped_exp])
             plt.close(fig)
@@ -458,9 +450,7 @@ class VectorTester(PlotTester):
         elif lines_expected is None:
             pass
         else:
-            raise ValueError(
-                "lines_expected is not of expected type: GeoDataFrame"
-            )
+            raise ValueError("lines_expected is not of expected type: GeoDataFrame")
 
     """ Check Polygons """
 
@@ -476,7 +466,7 @@ class VectorTester(PlotTester):
         output = [
             [tuple(coords) for coords in path.vertices]
             for c in self.ax.collections
-            if type(c) == matplotlib.collections.PatchCollection
+            if isinstance(c, matplotlib.collections.PatchCollection)
             for path in c.get_paths()
         ]
         return sorted(output)
@@ -498,16 +488,14 @@ class VectorTester(PlotTester):
         """
         output = []
         for entry in series:
-            if type(entry) == shapely.geometry.multipolygon.MultiPolygon:
+            if isinstance(entry, shapely.geometry.multipolygon.MultiPolygon):
                 for poly in entry:
                     output += [list(poly.exterior.coords)]
-            if type(entry) == shapely.geometry.polygon.Polygon:
+            if isinstance(entry, shapely.geometry.polygon.Polygon):
                 output += [list(entry.exterior.coords)]
         return output
 
-    def assert_polygons(
-        self, polygons_expected, dec=None, m="Incorrect Polygon Data"
-    ):
+    def assert_polygons(self, polygons_expected, dec=None, m="Incorrect Polygon Data"):
         """Asserts the polygon data in Axes ax is equal to polygons_expected to
         decimal place dec with error message m
         If polygons_expected is am empty list or None, assertion is passed.
@@ -527,8 +515,7 @@ class VectorTester(PlotTester):
             if isinstance(polygons_expected, list):
                 if len(polygons_expected[0]) == 0:
                     raise ValueError(
-                        "Empty list or GeoDataFrame passed into assert_"
-                        "polygons."
+                        "Empty list or GeoDataFrame passed into assert_polygons."
                     )
             if isinstance(polygons_expected, gpd.geodataframe.GeoDataFrame):
                 polygons_expected = self._convert_multipolygons(
@@ -548,6 +535,4 @@ class VectorTester(PlotTester):
             else:
                 np.testing.assert_equal(polygons, sorted(polygons_expected), m)
         else:
-            raise ValueError(
-                "Empty list or GeoDataFrame passed into assert_polygons."
-            )
+            raise ValueError("Empty list or GeoDataFrame passed into assert_polygons.")

@@ -1,4 +1,5 @@
 """Tests for the vector module"""
+
 import matplotlib
 import matplotlib.pyplot as plt
 import pytest
@@ -124,14 +125,10 @@ def test_assert_lines_grouped_by_type(multiline_geo_plot, multi_line_gdf):
     plt.close("all")
 
 
-def test_assert_lines_grouped_by_type_fail(
-    multiline_geo_plot_bad, multi_line_gdf
-):
+def test_assert_lines_grouped_by_type_fail(multiline_geo_plot_bad, multi_line_gdf):
     """Test that assert fails for incorrectly grouped line plots"""
     with pytest.raises(AssertionError, match="Line attributes not accurate "):
-        multiline_geo_plot_bad.assert_lines_grouped_by_type(
-            multi_line_gdf, "attr"
-        )
+        multiline_geo_plot_bad.assert_lines_grouped_by_type(multi_line_gdf, "attr")
         plt.close("all")
 
 
@@ -141,9 +138,7 @@ def test_assert_lines_grouped_by_type_passes_with_none(multiline_geo_plot):
     plt.close("all")
 
 
-def test_assert_lines_grouped_by_type_fails_non_gdf(
-    multiline_geo_plot, multi_line_gdf
-):
+def test_assert_lines_grouped_by_type_fails_non_gdf(multiline_geo_plot, multi_line_gdf):
     """Test that assert fails if a list is passed into it"""
     with pytest.raises(ValueError, match="lines_expected is not of expected "):
         multiline_geo_plot.assert_lines_grouped_by_type(

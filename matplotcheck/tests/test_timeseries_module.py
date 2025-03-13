@@ -42,9 +42,7 @@ def test_assert_xydata_timeseries_fails(pt_time_line_plt):
         pt_time_line_plt.assert_xydata(data, xcol="x", ycol="y")
 
 
-def test_assert_xydata_timeseries_truncation_error(
-    pt_time_line_plt, pd_df_timeseries
-):
+def test_assert_xydata_timeseries_truncation_error(pt_time_line_plt, pd_df_timeseries):
     """Tests that assert_xydata() handles floating-point truncation error
     gracefully for timeseries data."""
 

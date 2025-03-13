@@ -1,4 +1,5 @@
 """Tests for the base module"""
+
 import pytest
 import matplotlib.pyplot as plt
 

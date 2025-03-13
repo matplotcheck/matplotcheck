@@ -90,9 +90,7 @@ plot_tester_1.assert_title_contains(["average", "monthly precip", "boulder"])
 
 # Test that the axis labels contain specific words
 plot_tester_1.assert_axis_label_contains(axis="x", strings_expected=["month"])
-plot_tester_1.assert_axis_label_contains(
-    axis="y", strings_expected=["percip", "in"]
-)
+plot_tester_1.assert_axis_label_contains(axis="y", strings_expected=["percip", "in"])
 
 ###############################################################################
 # Now you can create a DataFrame to store the data that you expect to see in our
@@ -126,13 +124,9 @@ expected_y_data = [
     1.22,
     0.94,
 ]
-expected_data = pd.DataFrame(
-    {"Months": expected_x_data, "Percip": expected_y_data}
-)
+expected_data = pd.DataFrame({"Months": expected_x_data, "Percip": expected_y_data})
 
-plot_tester_1.assert_xydata(
-    expected_data, xcol="Months", ycol="Percip", xlabels=True
-)
+plot_tester_1.assert_xydata(expected_data, xcol="Months", ycol="Percip", xlabels=True)
 
 ###############################################################################
 # Since no errors have been raised by the above assertions, you know that all
@@ -153,15 +147,11 @@ except AssertionError as message:
 
 # Test that the axis labels contain specific strings
 try:
-    plot_tester_1.assert_axis_label_contains(
-        axis="x", strings_expected=["year"]
-    )
+    plot_tester_1.assert_axis_label_contains(axis="x", strings_expected=["year"])
 except AssertionError as message:
     print("AssertionError:", message)
 try:
-    plot_tester_1.assert_axis_label_contains(
-        axis="y", strings_expected=["wind speed"]
-    )
+    plot_tester_1.assert_axis_label_contains(axis="y", strings_expected=["wind speed"])
 except AssertionError as message:
     print("AssertionError:", message)
 

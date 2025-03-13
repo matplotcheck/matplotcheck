@@ -1,4 +1,5 @@
 """Tests for the base module that check data"""
+
 import pytest
 from matplotcheck.base import PlotTester
 import matplotlib.pyplot as plt
@@ -65,9 +66,7 @@ def pt_hist():
 @pytest.fixture
 def pt_hist_overlapping():
     dataframe_a = pd.DataFrame({"A": np.exp(np.arange(1, 2, 0.01))})
-    dataframe_b = pd.DataFrame(
-        {"B": (7.4 - (np.exp(np.arange(1, 2, 0.01)) - np.e))}
-    )
+    dataframe_b = pd.DataFrame({"B": (7.4 - (np.exp(np.arange(1, 2, 0.01)) - np.e))})
     bins = [2, 3, 4, 5, 6, 7, 8]
 
     _, ax = plt.subplots()
@@ -90,7 +89,7 @@ def test_assert_xydata_scatter(pt_scatter_plt, pd_df):
 def test_assert_xydata_tolerance(pt_scatter_plt, pd_df):
     """Checks that slightly altered data still passes with an appropriate
     tolerence"""
-    pd_df = pd_df.astype(np.float)
+    pd_df = pd_df.astype(float)
     for i in range(len(pd_df["A"])):
         pd_df["A"][i] = pd_df["A"][i] + np.random.choice([-0.1, 0.1])
         pd_df["B"][i] = pd_df["B"][i] + np.random.choice([-0.1, 0.1])
@@ -124,9 +123,7 @@ def test_assert_xydata_changed_data_points_only(pt_scatter_plt, pd_df):
     """assert_xydata should fail when we change the data"""
     pd_df["B"][1] += 5
     with pytest.raises(AssertionError, match="Incorrect data values"):
-        pt_scatter_plt.assert_xydata(
-            pd_df, xcol="A", ycol="B", points_only=True
-        )
+        pt_scatter_plt.assert_xydata(pd_df, xcol="A", ycol="B", points_only=True)
     plt.close()
 
 
@@ -433,9 +430,7 @@ def test_assert_bin_midpoints_overlap_fail(pt_hist_overlapping):
     """Test that bin midpoints fail with overlapping histograms when
     incorrect"""
     bins = [2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7]
-    with pytest.raises(
-        AssertionError, match="Did not find expected bin midpo"
-    ):
+    with pytest.raises(AssertionError, match="Did not find expected bin midpo"):
         pt_hist_overlapping.assert_bin_midpoints(bins)
 
     plt.close()
@@ -445,9 +440,7 @@ def test_assert_bin_midpoints_overlap_length_fail(pt_hist_overlapping):
     """Test that bin midpoints fail with overlapping histograms when
     incorrect length"""
     bins = [2.5, 3.5, 4.5, 5.5, 6.5, 7.5]
-    with pytest.raises(
-        ValueError, match="Bin midpoints lists lengths do no match"
-    ):
+    with pytest.raises(ValueError, match="Bin midpoints lists lengths do no match"):
         pt_hist_overlapping.assert_bin_midpoints(bins)
 
     plt.close()

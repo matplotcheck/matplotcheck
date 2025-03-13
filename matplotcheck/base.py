@@ -128,24 +128,18 @@ class PlotTester(object):
 
         for check in strings_expected:
             if isinstance(check, str):
-                if not check.lower().replace(" ", "") in string:
+                if check.lower().replace(" ", "") not in string:
                     raise AssertionError(message_default.format(check))
             elif isinstance(check, list):
-                if not any(
-                    [c.lower().replace(" ", "") in string for c in check]
-                ):
+                if not any([c.lower().replace(" ", "") in string for c in check]):
                     if len(check) == 1:
                         raise AssertionError(message_default.format(check[0]))
                     else:
                         raise AssertionError(message_or.format(check))
             else:
-                raise ValueError(
-                    "str_lst must be a list of: lists or strings."
-                )
+                raise ValueError("str_lst must be a list of: lists or strings.")
 
-    def assert_plot_type(
-        self, plot_type=None, message="Plot is not of type {0}"
-    ):
+    def assert_plot_type(self, plot_type=None, message="Plot is not of type {0}"):
         """Asserts Axes `ax` contains the type of plot specified in `plot_type`.
         if `plot_type` is ``None``, assertion is passed.
 
@@ -283,9 +277,7 @@ class PlotTester(object):
         ax_position = self.ax.get_position()
         for tex in self.ax.get_figure().texts:
             tex_position = tex.get_position()
-            if (
-                ax_position.ymin - 0.1 < tex_position[1] < ax_position.ymin
-            ) and (
+            if (ax_position.ymin - 0.1 < tex_position[1] < ax_position.ymin) and (
                 ax_position.xmax - 0.5 < tex_position[0] < ax_position.xmax
             ):
                 caption = tex
@@ -376,8 +368,7 @@ class PlotTester(object):
             flag = True
         # Case 3: Check if both axis ticks are set to empty lists
         elif (
-            self.ax.xaxis.get_gridlines() == []
-            and self.ax.yaxis.get_gridlines() == []
+            self.ax.xaxis.get_gridlines() == [] and self.ax.yaxis.get_gridlines() == []
         ):
             flag = True
 
@@ -486,9 +477,7 @@ class PlotTester(object):
         elif axis == "y":
             lims = [int(ylim) for ylim in self.ax.get_ylim()]
         else:
-            raise ValueError(
-                "axis must be one of the following string ['x', 'y']"
-            )
+            raise ValueError("axis must be one of the following string ['x', 'y']")
 
         # Check retrieved limits against expected min and max values
         assert np.array_equal(lims, lims_expected), message.format(axis)
@@ -532,21 +521,13 @@ class PlotTester(object):
         elif axis == "y":
             lims = self.ax.get_ylim()
         else:
-            raise ValueError(
-                "axis must be one of the following string ['x', 'y']"
-            )
+            raise ValueError("axis must be one of the following string ['x', 'y']")
         # Check if the min falls with in lims_range[0]
-        assert (
-            lims_range[0][0] <= lims[0] <= lims_range[0][1]
-        ), message_min.format(axis)
+        assert lims_range[0][0] <= lims[0] <= lims_range[0][1], message_min.format(axis)
         # Check if the max falls with in lims_range[1]
-        assert (
-            lims_range[1][0] <= lims[1] <= lims_range[1][1]
-        ), message_max.format(axis)
+        assert lims_range[1][0] <= lims[1] <= lims_range[1][1], message_max.format(axis)
 
-    def assert_equal_xlims_ylims(
-        self, message="xlims and ylims are not equal"
-    ):
+    def assert_equal_xlims_ylims(self, message="xlims and ylims are not equal"):
         """Assert the x and y lims of Axes ax are exactly equal to each other
 
         Parameters
@@ -682,9 +663,7 @@ class PlotTester(object):
         )
         assert set(legend_texts) == set(labels_exp), message
 
-    def assert_legend_no_overlay_content(
-        self, message="Legend overlays plot window"
-    ):
+    def assert_legend_no_overlay_content(self, message="Legend overlays plot window"):
         """Asserts that each legend does not overlay plot window
 
         Parameters
@@ -751,17 +730,11 @@ class PlotTester(object):
         n = len(legends)
         for i in range(n - 1):
             # Get extent of first legend in check, RendererBase() avoids error
-            leg_extent1 = (
-                legends[i].get_window_extent(RendererBase()).get_points()
-            )
+            leg_extent1 = legends[i].get_window_extent(RendererBase()).get_points()
             for j in range(i + 1, n):
                 # Get extent of second legend in check
-                leg_extent2 = (
-                    legends[j].get_window_extent(RendererBase()).get_points()
-                )
-                assert not self.legends_overlap(
-                    leg_extent1, leg_extent2
-                ), message
+                leg_extent2 = legends[j].get_window_extent(RendererBase()).get_points()
+                assert not self.legends_overlap(leg_extent1, leg_extent2), message
 
     """ BASIC PLOT DATA FUNCTIONS """
 
@@ -787,16 +760,13 @@ class PlotTester(object):
             xy_coords = [
                 val
                 for line in self.ax.lines
-                if (
-                    line.get_linestyle() == "None"
-                    or line.get_linewidth() == "None"
-                )
+                if (line.get_linestyle() == "None" or line.get_linewidth() == "None")
                 for val in line.get_xydata()
             ]  # .plot()
             xy_coords += [
                 val
                 for c in self.ax.collections
-                if type(c) != matplotlib.collections.PolyCollection
+                if not isinstance(c, matplotlib.collections.PolyCollection)
                 for val in c.get_offsets()
             ]  # .scatter()
 
@@ -892,9 +862,7 @@ class PlotTester(object):
             xcol, ycol = "x", "y"
 
         if xlabels:
-            self.assert_xlabel_ydata(
-                xy_expected, xcol=xcol, ycol=ycol, message=message
-            )
+            self.assert_xlabel_ydata(xy_expected, xcol=xcol, ycol=ycol, message=message)
             return
         xy_data = self.get_xy(points_only=points_only)
 
@@ -939,9 +907,7 @@ class PlotTester(object):
                 raise AssertionError(message)
             except ValueError:
                 # xy_data and xy_expected do not have the same shape
-                raise ValueError(
-                    "xy_data and xy_expected do not have the same shape"
-                )
+                raise ValueError("xy_data and xy_expected do not have the same shape")
             try:
                 np.testing.assert_array_max_ulp(
                     xy_data["y"].to_numpy(dtype=np.float64),
@@ -954,13 +920,9 @@ class PlotTester(object):
                 raise AssertionError(message)
             except ValueError:
                 # xy_data and xy_expected do not have the same shape
-                raise ValueError(
-                    "xy_data and xy_expected do not have the same shape"
-                )
+                raise ValueError("xy_data and xy_expected do not have the same shape")
 
-    def assert_xlabel_ydata(
-        self, xy_expected, xcol, ycol, message="Incorrect Data"
-    ):
+    def assert_xlabel_ydata(self, xy_expected, xcol, ycol, message="Incorrect Data"):
         """Asserts that the numbers in x labels and y values in Axes `ax` match
         `xy_expected`.
 
@@ -1177,9 +1139,7 @@ class PlotTester(object):
                     raise AssertionError(
                         "linear-regression line not displayed properly"
                     )
-                slope_exp, intercept_exp, _, _, _ = stats.linregress(
-                    xy.x, xy.y
-                )
+                slope_exp, intercept_exp, _, _, _ = stats.linregress(xy.x, xy.y)
             elif line_type == "onetoone":
                 slope_exp, intercept_exp = 1, 0
             else:
@@ -1191,12 +1151,8 @@ class PlotTester(object):
             self.assert_line(
                 slope_exp,
                 intercept_exp,
-                message_no_line="{0} line not displayed properly".format(
-                    line_type
-                ),
-                message_data="{0} line does not cover dataset".format(
-                    line_type
-                ),
+                message_no_line="{0} line not displayed properly".format(line_type),
+                message_data="{0} line does not cover dataset".format(line_type),
                 check_coverage=check_coverage,
             )
 
@@ -1244,9 +1200,7 @@ class PlotTester(object):
 
         num_bins_found = self.get_num_bins()
 
-        assert num_bins == num_bins_found, message.format(
-            num_bins, num_bins_found
-        )
+        assert num_bins == num_bins_found, message.format(num_bins, num_bins_found)
 
     def get_bin_values(self):
         """Returns the value of each bin in a histogram (i.e. the height of each
@@ -1362,9 +1316,7 @@ class PlotTester(object):
         plot_bin_midpoints = self.get_bin_midpoints()
 
         if not isinstance(bin_midpoints, list):
-            raise ValueError(
-                "Need to submit a list for expected bin midpoints."
-            )
+            raise ValueError("Need to submit a list for expected bin midpoints.")
 
         if len(plot_bin_midpoints) != len(bin_midpoints):
             raise ValueError("Bin midpoints lists lengths do no match.")

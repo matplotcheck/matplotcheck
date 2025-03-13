@@ -14,7 +14,7 @@ def run_test(
     *args,
     correct_message="default correct",
     error_message="default error",
-    **kwargs
+    **kwargs,
 ):
     """Run a pre-defined test function and creates a dictionary
     containing the results of the test
@@ -85,16 +85,8 @@ def output_results(results):
         points += r["points"]
         print("Results for test '{}':".format(r["description"]))
         if r["pass"]:
-            print(
-                " Pass! {msg} ({p} points)".format(
-                    msg=r["message"], p=r["points"]
-                )
-            )
+            print(" Pass! {msg} ({p} points)".format(msg=r["message"], p=r["points"]))
         else:
-            print(
-                " Fail! {msg} ({p} points)".format(
-                    msg=r["message"], p=r["points"]
-                )
-            )
+            print(" Fail! {msg} ({p} points)".format(msg=r["message"], p=r["points"]))
             print(" Traceback: {t}".format(t=r["traceback"]))
     return points

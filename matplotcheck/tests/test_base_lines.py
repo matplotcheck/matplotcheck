@@ -36,7 +36,7 @@ def pd_df_reg_one2one_data():
 def pt_reg_data(pd_df_reg_data):
     """Create a PlotTester object with a regression line"""
     fig, ax = plt.subplots()
-    sns.regplot("A", "B", data=pd_df_reg_data, ax=ax)
+    sns.regplot(x="A", y="B", data=pd_df_reg_data, ax=ax)
 
     return PlotTester(ax)
 
@@ -45,8 +45,8 @@ def pt_reg_data(pd_df_reg_data):
 def pt_multiple_reg(pd_df_reg_data):
     """Create a PlotTester object with multiple regression line"""
     fig, ax = plt.subplots()
-    sns.regplot("A", "B", data=pd_df_reg_data[:5], ax=ax)
-    sns.regplot("A", "B", data=pd_df_reg_data[5:], ax=ax)
+    sns.regplot(x="A", y="B", data=pd_df_reg_data[:5], ax=ax)
+    sns.regplot(x="A", y="B", data=pd_df_reg_data[5:], ax=ax)
 
     return PlotTester(ax)
 
@@ -65,7 +65,7 @@ def pt_reg_one2one(pd_df_reg_data):
     """Create a PlotTester object with a regression line and a one-to-one
     line"""
     fig, ax = plt.subplots()
-    sns.regplot("A", "B", data=pd_df_reg_data, ax=ax)
+    sns.regplot(x="A", y="B", data=pd_df_reg_data, ax=ax)
     ax.plot((0, 1), (0, 1), transform=ax.transAxes, ls="--", c="k")
 
     return PlotTester(ax)
@@ -76,7 +76,7 @@ def pt_one2one_reg_close(pd_df_reg_one2one_data):
     """Create a PlotTester object with a regression line that doesn't cover
     all the points in a plot."""
     fig, ax = plt.subplots()
-    sns.regplot("A", "B", data=pd_df_reg_one2one_data, ax=ax, fit_reg=False)
+    sns.regplot(x="A", y="B", data=pd_df_reg_one2one_data, ax=ax, fit_reg=False)
     ax.plot(
         (0.0001, 1.9999),
         (0.0001, 1.9999),
@@ -92,7 +92,7 @@ def pt_one2one_reg(pd_df_reg_one2one_data):
     """Create a PlotTester object with a regression line that is plotted so the
     points are not covered by the regression line."""
     fig, ax = plt.subplots()
-    sns.regplot("A", "B", data=pd_df_reg_one2one_data, ax=ax, fit_reg=False)
+    sns.regplot(x="A", y="B", data=pd_df_reg_one2one_data, ax=ax, fit_reg=False)
     ax.plot((0, 1), (0, 1), transform=ax.transAxes, ls="--", c="k")
     return PlotTester(ax)
 
@@ -111,9 +111,7 @@ def test_reg_plot(pd_df_reg_data, pt_reg_data):
 def test_reg_plot_slope_fails(pd_df_reg_data, pt_reg_data):
     """Check that assert_line() correctly falis when given an incorrect
     slope."""
-    _, intercept_exp, _, _, _ = stats.linregress(
-        pd_df_reg_data.A, pd_df_reg_data.B
-    )
+    _, intercept_exp, _, _, _ = stats.linregress(pd_df_reg_data.A, pd_df_reg_data.B)
     with pytest.raises(AssertionError, match="Expected line not displayed"):
         pt_reg_data.assert_line(1, intercept_exp)
 
@@ -121,9 +119,7 @@ def test_reg_plot_slope_fails(pd_df_reg_data, pt_reg_data):
 def test_reg_plot_intercept_fails(pd_df_reg_data, pt_reg_data):
     """Check that assert_line() correctly fails when given an incorrect
     intercept"""
-    slope_exp, _, _, _, _ = stats.linregress(
-        pd_df_reg_data.A, pd_df_reg_data.B
-    )
+    slope_exp, _, _, _, _ = stats.linregress(pd_df_reg_data.A, pd_df_reg_data.B)
 
     with pytest.raises(AssertionError, match="Expected line not displayed"):
         pt_reg_data.assert_line(slope_exp, 1)
@@ -161,9 +157,7 @@ def test_line_type_reg_fails(pt_one2one):
 def test_line_type_one2one_fails(pt_reg_data):
     """Check that assert_lines_of_type() correctly fails when checking for a
     one-to-one line, but one does not exist."""
-    with pytest.raises(
-        AssertionError, match="onetoone line not displayed properly"
-    ):
+    with pytest.raises(AssertionError, match="onetoone line not displayed properly"):
         pt_reg_data.assert_lines_of_type("onetoone")
 
 

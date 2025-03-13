@@ -1,7 +1,9 @@
 """Tests for the vector module"""
+
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+import pandas as pd
 import pytest
 import geopandas as gpd
 
@@ -14,9 +16,7 @@ matplotlib.use("Agg")
 def bad_pd_gdf(pd_gdf):
     """Create a point geodataframe with slightly wrong values for testing"""
     return gpd.GeoDataFrame(
-        geometry=gpd.points_from_xy(
-            pd_gdf.geometry.x + 1, pd_gdf.geometry.y + 1
-        )
+        geometry=gpd.points_from_xy(pd_gdf.geometry.x + 1, pd_gdf.geometry.y + 1)
     )
 
 
@@ -25,8 +25,11 @@ def origin_pt_gdf(pd_gdf):
     """Create a point geodataframe to test assert_points when a point at the
     origin of the plot (0, 0) is present in the dataframe. This checks
     for a specific bug fix that was added to the assert_points function."""
-    origin_pt_gdf = pd_gdf.append(
-        gpd.GeoDataFrame(geometry=gpd.points_from_xy([0], [0]))
+    origin_pt_gdf = pd.concat(
+        [
+            pd_gdf,
+            gpd.GeoDataFrame(geometry=gpd.points_from_xy([0], [0])),
+        ]
     )
     origin_pt_gdf.reset_index(inplace=True, drop=True)
     return origin_pt_gdf
@@ -144,7 +147,8 @@ def test_assert_points_custom_message(pt_geo_plot, bad_pd_gdf):
 def test_wrong_length_points_expected(pt_geo_plot, pd_gdf, bad_pd_gdf):
     """Tests that error is thrown for incorrect length of a gdf"""
     with pytest.raises(AssertionError, match="points_expected's length does "):
-        pt_geo_plot.assert_points(bad_pd_gdf.append(pd_gdf), "attr")
+        bad_pd_gdf = pd.concat([bad_pd_gdf, bad_pd_gdf])
+        pt_geo_plot.assert_points(bad_pd_gdf, "attr")
         plt.close("all")
 
 

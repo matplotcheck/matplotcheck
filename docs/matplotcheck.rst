@@ -1,77 +1,58 @@
 matplotcheck package
 ====================
 
+.. automodule:: matplotcheck
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Submodules
 ----------
 
-matplotcheck.autograde module
------------------------------
 
 .. automodule:: matplotcheck.autograde
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
-matplotcheck.base module
-------------------------
 
 .. automodule:: matplotcheck.base
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
-matplotcheck.cases module
--------------------------
 
 .. automodule:: matplotcheck.cases
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
-matplotcheck.folium module
---------------------------
 
 .. automodule:: matplotcheck.folium
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
-matplotcheck.notebook module
-----------------------------
 
 .. automodule:: matplotcheck.notebook
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
-matplotcheck.raster module
---------------------------
 
 .. automodule:: matplotcheck.raster
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
-matplotcheck.timeseries module
-------------------------------
 
 .. automodule:: matplotcheck.timeseries
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
-matplotcheck.vector module
---------------------------
 
 .. automodule:: matplotcheck.vector
    :members:
-   :undoc-members:
    :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: matplotcheck
-   :members:
    :undoc-members:
-   :show-inheritance:

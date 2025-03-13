@@ -49,12 +49,12 @@ class RasterTester(VectorTester):
 
         # Check that colorbar range matches expected crange
         if crange:
-            assert (
-                cb[0].vmin == crange[0]
-            ), "Colorbar minimum is not expected value:{0}".format(crange[0])
-            assert (
-                cb[0].vmax == crange[1]
-            ), "Colorbar maximum is not expected value:{0}".format(crange[1])
+            assert cb[0].vmin == crange[0], (
+                "Colorbar minimum is not expected value:{0}".format(crange[0])
+            )
+            assert cb[0].vmax == crange[1], (
+                "Colorbar maximum is not expected value:{0}".format(crange[1])
+            )
 
     def _which_label(self, label, all_label_options):
         """Helper function for assert_legend_accuracy_classified_image
@@ -80,9 +80,7 @@ class RasterTester(VectorTester):
                     return label_opts[0]
         return None
 
-    def assert_legend_accuracy_classified_image(
-        self, im_expected, all_label_options
-    ):
+    def assert_legend_accuracy_classified_image(self, im_expected, all_label_options):
         """Asserts legend correctly describes classified image on Axes ax,
         checking the legend labels and the values
 
@@ -128,14 +126,10 @@ class RasterTester(VectorTester):
         # matches that entry
         legend_dict = {}
         for p in [
-            p
-            for sublist in [leg.get_patches() for leg in legends]
-            for p in sublist
+            p for sublist in [leg.get_patches() for leg in legends] for p in sublist
         ]:
             label = p.get_label().lower()
-            legend_dict[p.get_facecolor()] = self._which_label(
-                label, all_label_options
-            )
+            legend_dict[p.get_facecolor()] = self._which_label(label, all_label_options)
 
         # Check that each legend entry label is in one of all_label_options
         assert len([val for val in legend_dict.values() if val]) == len(
@@ -148,17 +142,15 @@ class RasterTester(VectorTester):
         im_class_dict = {}
         for val in np.unique(im_data):
             im_class_dict[val] = legend_dict[im_cmap(im.norm(val))]
-        im_data_labels = [
-            [im_class_dict[val] for val in row] for row in im_data.data
-        ]
+        im_data_labels = [[im_class_dict[val] for val in row] for row in im_data.data]
         im_expected_labels = [
             [all_label_options[val][0] for val in row] for row in im_expected
         ]
 
         # Check that expected and actual labels match up
-        assert np.array_equal(
-            im_data_labels, im_expected_labels
-        ), "Incorrect legend to data relation"
+        assert np.array_equal(im_data_labels, im_expected_labels), (
+            "Incorrect legend to data relation"
+        )
 
         # IMAGE TESTS/HELPER FUNCTIONS
 

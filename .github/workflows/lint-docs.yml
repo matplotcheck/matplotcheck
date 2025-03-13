@@ -39,4 +39,4 @@ jobs:
     - name: Run ruff
       run: |
         uv run -- ruff check
-        uv ruh -- ruff format --check
+        uv run -- ruff format --check

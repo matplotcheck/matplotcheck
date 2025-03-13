@@ -91,15 +91,15 @@ def test_assert_xydata_tolerance(pt_scatter_plt, pd_df):
     tolerence"""
     pd_df = pd_df.astype(float)
     for i in range(len(pd_df["A"])):
-        pd_df["A"][i] = pd_df["A"][i] + np.random.choice([-0.1, 0.1])
-        pd_df["B"][i] = pd_df["B"][i] + np.random.choice([-0.1, 0.1])
+        pd_df.loc[i, "A"] = pd_df.loc[i, "A"] + np.random.choice([-0.1, 0.1])
+        pd_df.loc[i, "B"] = pd_df.loc[i, "B"] + np.random.choice([-0.1, 0.1])
     pt_scatter_plt.assert_xydata(pd_df, xcol="A", ycol="B", tolerance=0.2)
     plt.close()
 
 
 def test_assert_xydata_abs_tolerance_fails(pt_scatter_plt, pd_df):
     """Checks that data altered beyond the tolerence correctly fails."""
-    pd_df["A"][1] = pd_df["A"][1] + 1
+    pd_df.loc[1, "A"] = pd_df.loc[1, "A"] + 1
     with pytest.raises(AssertionError, match="Incorrect data values"):
         pt_scatter_plt.assert_xydata(pd_df, xcol="A", ycol="B", tolerance=0.1)
     plt.close()
@@ -107,7 +107,7 @@ def test_assert_xydata_abs_tolerance_fails(pt_scatter_plt, pd_df):
 
 def test_assert_xydata_changed_data(pt_scatter_plt, pd_df):
     """assert_xydata should fail when we change the data"""
-    pd_df["B"][1] += 5
+    pd_df.loc[1, "B"] += 5
     with pytest.raises(AssertionError, match="Incorrect data values"):
         pt_scatter_plt.assert_xydata(pd_df, xcol="A", ycol="B")
     plt.close()
@@ -121,7 +121,7 @@ def test_assert_xydata_scatter_points_only(pt_scatter_plt, pd_df):
 
 def test_assert_xydata_changed_data_points_only(pt_scatter_plt, pd_df):
     """assert_xydata should fail when we change the data"""
-    pd_df["B"][1] += 5
+    pd_df.loc[1, "B"] += 5
     with pytest.raises(AssertionError, match="Incorrect data values"):
         pt_scatter_plt.assert_xydata(pd_df, xcol="A", ycol="B", points_only=True)
     plt.close()
@@ -130,7 +130,7 @@ def test_assert_xydata_changed_data_points_only(pt_scatter_plt, pd_df):
 def test_assert_xydata_floatingpoint_error(pt_scatter_plt, pd_df):
     """Tests the assert_xydata correctly handles floating point error"""
     for i in range(len(pd_df["A"])):
-        pd_df["A"][i] = pd_df["A"][i] + 1.0e-10
+        pd_df.loc[i, "A"] = pd_df.loc[i, "A"] + 1.0e-10
     pt_scatter_plt.assert_xydata(pd_df, xcol="A", ycol="B", points_only=True)
     plt.close()
 
@@ -148,7 +148,7 @@ def test_assert_xydata_xlabel(pt_bar_plt, pd_df):
 def test_assert_xydata_xlabel_fails(pt_bar_plt, pd_df):
     """Tests the xlabels flag on xydata"""
     pd_df["A"] = pd_df["A"].apply(str)
-    pd_df.iloc[1, 0] = "this ain't it cheif"
+    pd_df.loc[1, "A"] = "this ain't it cheif"
     with pytest.raises(AssertionError, match="Incorrect data values"):
         pt_bar_plt.assert_xydata(pd_df, xcol="A", ycol="B", xlabels=True)
     plt.close()

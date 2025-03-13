@@ -64,9 +64,9 @@ import pandas as pd
 import unittest
 
 axis = plt.gca()
-data = pd.DataFrame(data={“x”:xvals, “y”:yvals})
-suite = PlotBasicSuite(ax=axis, data_exp=data, xcol=”x”, ycol=”y”)
-xlabel_contains=[“x”], ylabel_contains = [“y”,”data”])
+data = pd.DataFrame(data={"x":xvals, "y":yvals})
+suite = PlotBasicSuite(ax=axis, data_exp=data, xcol="x", ycol="y")
+xlabel_contains=["x"], ylabel_contains = ["y","data"])
 results = unittest.TextTestRunner().run(suite)
 ```
 
@@ -90,10 +90,10 @@ from matplotcheck.base import PlotTester
 import pandas as pd
 axis = plt.gca()
 pt = PlotTester(axis)
-data = pd.DataFrame(data={“x”:xvals, “y”:yvals})
-pt.assert_xydata(data, “x”, “y”)
-pt.assert_xlabel_contains([“x”])
-pt.assert_ylabel_contains([“y”, “data”])
+data = pd.DataFrame(data={"x":xvals, "y":yvals})
+pt.assert_xydata(data, "x", "y")
+pt.assert_xlabel_contains(["x"])
+pt.assert_ylabel_contains(["y", "data"])
 ```
 
 Plot containing a spatial raster image and spatial polygon vector data

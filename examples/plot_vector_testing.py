@@ -44,7 +44,7 @@ line_gdf = gpd.GeoDataFrame([1, 2], geometry=[linea, lineb], crs="epsg:4326")
 # Create a multiline GeoDataFrame
 linec = LineString([(2, 1), (3, 1), (4, 1), (5, 2)])
 multi_line_gdf = gpd.GeoDataFrame(
-    geometry=gpd.GeoSeries([line_gdf.unary_union, linec]), crs="epsg:4326"
+    geometry=gpd.GeoSeries([line_gdf.union_all(), linec]), crs="epsg:4326"
 )
 multi_line_gdf["attr"] = ["road", "stream"]
 

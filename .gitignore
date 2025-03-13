@@ -36,3 +36,6 @@ uv.lock
 # test coverage
 coverage.xml
 .coverage
+
+# editor files
+.vscode/

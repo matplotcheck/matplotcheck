@@ -7,10 +7,10 @@ build:
 python:
   install:
       - requirements: pyproject.toml
-      - method: pip
-        path: .
         extra-requirements:
           - dev
+      - method: pip
+        path: .
 sphinx:
   configuration: docs/conf.py
   fail_on_warning: true

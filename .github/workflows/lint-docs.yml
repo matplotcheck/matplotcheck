@@ -34,8 +34,9 @@ jobs:
       run: uv sync --dev
     - name: Build Docs
       run: |
-        make docs -B
+        source .venv/bin/activate
+        make build-docs -B
     - name: Run ruff
       run: |
-        ruff check
-        ruff format --check
+        uv run ruff check
+        uv ruh ruff format --check

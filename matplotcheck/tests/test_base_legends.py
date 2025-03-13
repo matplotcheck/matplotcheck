@@ -1,4 +1,5 @@
 """Tests for the base module -- legends"""
+
 import pytest
 import matplotlib.pyplot as plt
 
@@ -54,9 +55,7 @@ def test_assert_legend_not_case_sensitive(pt_multi_line_plt):
 def test_assert_legend_labels_bad_text(pt_multi_line_plt):
     """Check that assert_legend_labels raises expected error when given
     wrong text"""
-    with pytest.raises(
-        AssertionError, match="Legend does not have expected labels"
-    ):
+    with pytest.raises(AssertionError, match="Legend does not have expected labels"):
         pt_multi_line_plt.assert_legend_labels(["a", "c"])
     plt.close()
 
@@ -64,9 +63,7 @@ def test_assert_legend_labels_bad_text(pt_multi_line_plt):
 def test_assert_legend_labels_wrong_num(pt_multi_line_plt):
     """Check that assert_legend_labels raises expected error given wrong
     number of labels"""
-    with pytest.raises(
-        AssertionError, match="I was expecting 3 legend entries"
-    ):
+    with pytest.raises(AssertionError, match="I was expecting 3 legend entries"):
         pt_multi_line_plt.assert_legend_labels(["a", "b", "c"])
     plt.close()
 

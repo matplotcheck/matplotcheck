@@ -30,9 +30,10 @@ from matplotcheck.vector import VectorTester
 
 # Create a polygon GeoDataFrame
 coords = [(2, 4), (2, 4.25), (4.25, 4.25), (4.25, 2), (2, 2)]
-coords_b = [(i[0]+5, i[1]+7) for i in coords]
+coords_b = [(i[0] + 5, i[1] + 7) for i in coords]
 polygon_gdf = gpd.GeoDataFrame(
-    [1, 2], geometry=[Polygon(coords), Polygon(coords_b)], crs="epsg:4326")
+    [1, 2], geometry=[Polygon(coords), Polygon(coords_b)], crs="epsg:4326"
+)
 polygon_gdf["attr"] = ["Area 1", "Area 2"]
 
 # Create a line GeoDataFrame
@@ -42,8 +43,9 @@ line_gdf = gpd.GeoDataFrame([1, 2], geometry=[linea, lineb], crs="epsg:4326")
 
 # Create a multiline GeoDataFrame
 linec = LineString([(2, 1), (3, 1), (4, 1), (5, 2)])
-multi_line_gdf = gpd.GeoDataFrame(geometry=gpd.GeoSeries(
-    [line_gdf.unary_union, linec]), crs="epsg:4326")
+multi_line_gdf = gpd.GeoDataFrame(
+    geometry=gpd.GeoSeries([line_gdf.unary_union, linec]), crs="epsg:4326"
+)
 multi_line_gdf["attr"] = ["road", "stream"]
 
 # Create a point GeoDataFrame
@@ -56,7 +58,8 @@ points = pd.DataFrame(
 
 point_gdf = gpd.GeoDataFrame(
     {"A": np.arange(5), "B": np.arange(5)},
-    geometry=gpd.points_from_xy(points.lon, points.lat), crs="epsg:4326"
+    geometry=gpd.points_from_xy(points.lon, points.lat),
+    crs="epsg:4326",
 )
 point_gdf["size"] = [100, 100, 300, 300, 500]
 
@@ -77,19 +80,19 @@ fig, ax = plt.subplots()
 polygon_gdf.plot(ax=ax, color="purple")
 
 # Plot your line data by attributes using groupby
-for ctype, lines in multi_line_gdf.groupby('attr'):
+for ctype, lines in multi_line_gdf.groupby("attr"):
     color = line_symb[ctype]
     label = ctype
     lines.plot(color=color, ax=ax, label=label)
 
 # Plot your points data by size using groupby
-for ctype, points in point_gdf.groupby('size'):
+for ctype, points in point_gdf.groupby("size"):
     color = point_symb[ctype]
     label = ctype
     points.plot(color=color, ax=ax, label=label, markersize=ctype)
 
 # Add a legend
-ax.legend(title="Legend", loc=(1.1, .1));
+ax.legend(title="Legend", loc=(1.1, 0.1))
 
 ################################################################################
 # Create A Matplotcheck VectorTester Object
@@ -173,26 +176,26 @@ vector_test.assert_polygons(polygon_gdf)
 # to test in a Jupyter Notebook.
 
 # First, import the Notebook module from Matplotcheck
-import matplotcheck.notebook as nb
+import matplotcheck.notebook as nb  # noqa: E402
 
 # Plot your data
 fig, ax = plt.subplots()
 polygon_gdf.plot(ax=ax, color="purple")
 
 # Plot your line data by attributes using groupby
-for ctype, lines in multi_line_gdf.groupby('attr'):
+for ctype, lines in multi_line_gdf.groupby("attr"):
     color = line_symb[ctype]
     label = ctype
     lines.plot(color=color, ax=ax, label=label)
 
 # Plot your points data by size using groupby
-for ctype, points in point_gdf.groupby('size'):
+for ctype, points in point_gdf.groupby("size"):
     color = point_symb[ctype]
     label = ctype
     points.plot(color=color, ax=ax, label=label, markersize=ctype)
 
 # Add a legend
-ax.legend(title="Legend", loc=(1.1, .1));
+ax.legend(title="Legend", loc=(1.1, 0.1))
 
 # Here is where you access the axes objects of the plot for testing.
 # You can add the code line below to the end of any plot cell to store all axes

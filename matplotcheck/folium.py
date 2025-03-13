@@ -18,7 +18,7 @@ class FoliumTester(object):
         """
         Asserts fmap is of type folium.folium.Map
         """
-        assert type(self.fmap) == folium.folium.Map
+        assert isinstance(self.fmap, folium.folium.Map)
 
     def assert_folium_marker_locs(
         self, markers, m="Markers not shown in appropriate location"
@@ -38,6 +38,6 @@ class FoliumTester(object):
         marker_locs = set()
         while self.fmap._children:
             c = self.fmap._children.popitem()[1]
-            if type(c) == folium.map.Marker:
+            if isinstance(c, folium.map.Marker):
                 marker_locs.add(tuple(c.location))
         assert marker_locs == markers, m

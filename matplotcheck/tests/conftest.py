@@ -1,4 +1,5 @@
 """Pytest fixtures for matplotcheck tests"""
+
 import pytest
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,9 +12,7 @@ from matplotcheck.base import PlotTester
 @pytest.fixture
 def pd_df():
     """Create a pandas dataframe for testing"""
-    return pd.DataFrame(
-        {"A": np.arange(100), "B": np.random.randint(0, 100, size=100)}
-    )
+    return pd.DataFrame({"A": np.arange(100), "B": np.random.randint(0, 100, size=100)})
 
 
 @pytest.fixture
@@ -70,7 +69,7 @@ def basic_polygon_gdf(basic_polygon):
 
 @pytest.fixture
 def two_line_gdf():
-    """ Create Line Objects For Testing """
+    """Create Line Objects For Testing"""
     linea = LineString([(1, 1), (2, 2), (3, 2), (5, 3)])
     lineb = LineString([(3, 4), (5, 7), (12, 2), (10, 5), (9, 7.5)])
     gdf = gpd.GeoDataFrame([1, 2], geometry=[linea, lineb], crs="epsg:4326")
@@ -113,9 +112,7 @@ def pt_line_plt(pd_df):
 
     # Insert caption
     ax_position = ax.get_position()
-    fig.text(
-        ax_position.ymax - 0.25, ax_position.ymin - 0.075, "Figure Caption"
-    )
+    fig.text(ax_position.ymax - 0.25, ax_position.ymin - 0.075, "Figure Caption")
 
     return PlotTester(ax)
 

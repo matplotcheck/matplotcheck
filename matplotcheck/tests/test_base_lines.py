@@ -111,9 +111,7 @@ def test_reg_plot(pd_df_reg_data, pt_reg_data):
 def test_reg_plot_slope_fails(pd_df_reg_data, pt_reg_data):
     """Check that assert_line() correctly falis when given an incorrect
     slope."""
-    _, intercept_exp, _, _, _ = stats.linregress(
-        pd_df_reg_data.A, pd_df_reg_data.B
-    )
+    _, intercept_exp, _, _, _ = stats.linregress(pd_df_reg_data.A, pd_df_reg_data.B)
     with pytest.raises(AssertionError, match="Expected line not displayed"):
         pt_reg_data.assert_line(1, intercept_exp)
 
@@ -121,9 +119,7 @@ def test_reg_plot_slope_fails(pd_df_reg_data, pt_reg_data):
 def test_reg_plot_intercept_fails(pd_df_reg_data, pt_reg_data):
     """Check that assert_line() correctly fails when given an incorrect
     intercept"""
-    slope_exp, _, _, _, _ = stats.linregress(
-        pd_df_reg_data.A, pd_df_reg_data.B
-    )
+    slope_exp, _, _, _, _ = stats.linregress(pd_df_reg_data.A, pd_df_reg_data.B)
 
     with pytest.raises(AssertionError, match="Expected line not displayed"):
         pt_reg_data.assert_line(slope_exp, 1)
@@ -161,9 +157,7 @@ def test_line_type_reg_fails(pt_one2one):
 def test_line_type_one2one_fails(pt_reg_data):
     """Check that assert_lines_of_type() correctly fails when checking for a
     one-to-one line, but one does not exist."""
-    with pytest.raises(
-        AssertionError, match="onetoone line not displayed properly"
-    ):
+    with pytest.raises(AssertionError, match="onetoone line not displayed properly"):
         pt_reg_data.assert_lines_of_type("onetoone")
 
 

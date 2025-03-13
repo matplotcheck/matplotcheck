@@ -134,9 +134,7 @@ class TimeSeriesTester(PlotTester):
             start, end = mdates.num2date(ticks[0]), mdates.num2date(ticks[-1])
             assert start < xlims[0] + inc, "Tick locators do not cover x axis"
             assert end > xlims[1] - inc, "Tick locators do not cover x axis"
-            ticks_exp = [
-                d.toordinal() for d in self._my_range(start, end, inc)
-            ]
+            ticks_exp = [d.toordinal() for d in self._my_range(start, end, inc)]
             np.testing.assert_equal(ticks, ticks_exp, m)
 
     def _my_range(self, start, end, step):
@@ -177,9 +175,7 @@ class TimeSeriesTester(PlotTester):
                 "data values"
             ).format(nodata)
 
-    def assert_xdata_date(
-        self, x_exp, m="X-axis is not in appropriate date format"
-    ):
+    def assert_xdata_date(self, x_exp, m="X-axis is not in appropriate date format"):
         """Asserts x-axis data has been parsed into datetime objects.
         Matplotlib changes datetime to floats representing number of days since
         day 0. If you are using dates prior to year 270, this assertion will

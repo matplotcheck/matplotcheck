@@ -22,17 +22,16 @@ sys.path.insert(0, os.path.abspath("../"))
 # -- Project information -----------------------------------------------------
 
 project = "matplotcheck"
-copyright = "{year}, Earth Lab Contributors, Leah Wasser".format(
+copyright = "{year}, Earth Lab Contributors, Leah Wasser, Pete Stenger".format(
     year=date.today().year
 )
 
 author = "Leah Wasser"
 
 # The short X.Y version
-version = "0.1.4"
+version = "0.2.0"
 # The full version, including alpha/beta/rc tags
-release = "0.1.4"
-
+release = version
 
 # -- General configuration ---------------------------------------------------
 
@@ -79,7 +78,7 @@ master_doc = "index"
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -101,7 +100,7 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "furo"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -166,9 +165,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, "matplotcheck", "matplotcheck Documentation", [author], 1)
-]
+man_pages = [(master_doc, "matplotcheck", "matplotcheck Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------------
@@ -213,3 +210,13 @@ epub_exclude_files = ["search.html"]
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 # todo_include_todos = True
+
+# -- Options for autodoc ----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#configuration
+
+# Automatically extract typehints when specified and place them in
+# descriptions of the relevant function/method.
+autodoc_typehints = "description"
+
+# Don't show class signature with the class' name.
+autodoc_class_signature = "separated"

@@ -1,4 +1,5 @@
 """Tests for the raster module"""
+
 import pytest
 import numpy as np
 import matplotlib.pyplot as plt
@@ -62,17 +63,13 @@ def raster_plt_class(np_ar_discrete):
     values = np.sort(np.unique(np_ar_discrete))
 
     fig, ax = plt.subplots()
-    im = ax.imshow(
-        np_ar_discrete, interpolation="none", cmap=plt.get_cmap("tab10")
-    )
+    im = ax.imshow(np_ar_discrete, interpolation="none", cmap=plt.get_cmap("tab10"))
     ax.set_title("My Plot Title", fontsize=30)
 
     # Create legend
     colors = [im.cmap(im.norm(val)) for val in values]
     patches = [
-        mpatches.Patch(
-            color=colors[i], label="Level {lev}".format(lev=values[i])
-        )
+        mpatches.Patch(color=colors[i], label="Level {lev}".format(lev=values[i]))
         for i in range(values.shape[0])
     ]
     plt.legend(handles=patches)
@@ -113,9 +110,7 @@ def test_raster_assert_colorbar_range_wrongmin(raster_plt, np_ar):
     # Should fail with min value
     with pytest.raises(
         AssertionError,
-        match="Colorbar minimum is not expected value:{}".format(
-            np_ar.min() - 1
-        ),
+        match="Colorbar minimum is not expected value:{}".format(np_ar.min() - 1),
     ):
         raster_plt.assert_colorbar_range([np_ar.min() - 1, np_ar.max()])
     plt.close()
@@ -126,9 +121,7 @@ def test_raster_assert_colorbar_range_wrongmax(raster_plt, np_ar):
     # Should fail with wrong max value
     with pytest.raises(
         AssertionError,
-        match="Colorbar maximum is not expected value:{}".format(
-            np_ar.max() + 0.1
-        ),
+        match="Colorbar maximum is not expected value:{}".format(np_ar.max() + 0.1),
     ):
         raster_plt.assert_colorbar_range([np_ar.min(), np_ar.max() + 0.1])
     plt.close()
@@ -169,9 +162,7 @@ def test_raster_assert_legend_accuracy(raster_plt_class, np_ar_discrete):
     plt.close()
 
 
-def test_raster_assert_legend_accuracy_badlabel(
-    raster_plt_class, np_ar_discrete
-):
+def test_raster_assert_legend_accuracy_badlabel(raster_plt_class, np_ar_discrete):
     """Checks that legend matches image, should fail with bad labels"""
     values = np.sort(np.unique(np_ar_discrete))
 
@@ -184,9 +175,7 @@ def test_raster_assert_legend_accuracy_badlabel(
     plt.close()
 
 
-def test_raster_assert_legend_accuracy_badvalues(
-    raster_plt_class, np_ar_discrete
-):
+def test_raster_assert_legend_accuracy_badvalues(raster_plt_class, np_ar_discrete):
     """Checks that legend matches image, should fail if you swap image
     values"""
     values = np.sort(np.unique(np_ar_discrete))
@@ -197,9 +186,7 @@ def test_raster_assert_legend_accuracy_badvalues(
     bad_image[bad_image == 0] = 1
 
     # Should fail with bad image
-    with pytest.raises(
-        AssertionError, match="Incorrect legend to data relation"
-    ):
+    with pytest.raises(AssertionError, match="Incorrect legend to data relation"):
         raster_plt_class.assert_legend_accuracy_classified_image(
             bad_image, label_options
         )
@@ -219,9 +206,7 @@ def test_raster_assert_legend_accuracy_nolegend(raster_plt, np_ar_discrete):
     plt.close()
 
 
-def test_raster_assert_legend_accuracy_noimage(
-    raster_plt_blank, np_ar_discrete
-):
+def test_raster_assert_legend_accuracy_noimage(raster_plt_blank, np_ar_discrete):
     """Check that assert_legend_accuracy fails if there is no image"""
     values = np.sort(np.unique(np_ar_discrete))
     label_options = [[str(i)] for i in values]
@@ -253,7 +238,7 @@ def test_raster_assert_image_baddata(raster_plt, np_ar):
 
 
 def test_raster_assert_image_blank(raster_plt_blank, np_ar):
-    """"assert_image should fail with blank image"""
+    """ "assert_image should fail with blank image"""
     with pytest.raises(AssertionError, match="No Image Displayed"):
         raster_plt_blank.assert_image(np_ar)
     plt.close()
@@ -299,9 +284,7 @@ def test_raster_assert_image_fullscreen_fail_xlims(raster_plt):
     cur_xlim = raster_plt.ax.get_xlim()
     raster_plt.ax.get_ylim()
     raster_plt.ax.set_xlim([cur_xlim[0], cur_xlim[1] + 5])
-    with pytest.raises(
-        AssertionError, match="Image is stretched inaccurately"
-    ):
+    with pytest.raises(AssertionError, match="Image is stretched inaccurately"):
         raster_plt.assert_image_full_screen()
     plt.close()
 
@@ -311,9 +294,7 @@ def test_raster_assert_image_fullscreen_fail_ylims(raster_plt):
     cur_xlim, cur_ylim = raster_plt.ax.get_xlim(), raster_plt.ax.get_ylim()
     raster_plt.ax.set_xlim([cur_xlim[0], cur_xlim[1]])
     raster_plt.ax.set_ylim([cur_ylim[0], cur_ylim[1] - 1])
-    with pytest.raises(
-        AssertionError, match="Image is stretched inaccurately"
-    ):
+    with pytest.raises(AssertionError, match="Image is stretched inaccurately"):
         raster_plt.assert_image_full_screen()
     plt.close()
 

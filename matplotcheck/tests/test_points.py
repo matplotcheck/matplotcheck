@@ -1,4 +1,5 @@
 """Tests for the vector module"""
+
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
@@ -15,9 +16,7 @@ matplotlib.use("Agg")
 def bad_pd_gdf(pd_gdf):
     """Create a point geodataframe with slightly wrong values for testing"""
     return gpd.GeoDataFrame(
-        geometry=gpd.points_from_xy(
-            pd_gdf.geometry.x + 1, pd_gdf.geometry.y + 1
-        )
+        geometry=gpd.points_from_xy(pd_gdf.geometry.x + 1, pd_gdf.geometry.y + 1)
     )
 
 

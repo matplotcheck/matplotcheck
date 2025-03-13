@@ -1,4 +1,5 @@
 """Tests for the base module -- titles and captions"""
+
 import pytest
 import matplotlib.pyplot as plt
 
@@ -42,9 +43,7 @@ def test_title_contains_expect_none(pt_line_plt):
 
 def test_title_contains_axes(pt_line_plt):
     """Check title_contains for axes title"""
-    pt_line_plt.assert_title_contains(
-        ["My", "Plot", "Title"], title_type="axes"
-    )
+    pt_line_plt.assert_title_contains(["My", "Plot", "Title"], title_type="axes")
     plt.close()
 
 
@@ -65,38 +64,28 @@ def test_title_contains_axes_badtext(pt_line_plt):
     with pytest.raises(
         AssertionError, match="Title does not contain expected string: foo"
     ):
-        pt_line_plt.assert_title_contains(
-            ["Title", "foo", "bar"], title_type="axes"
-        )
+        pt_line_plt.assert_title_contains(["Title", "foo", "bar"], title_type="axes")
     plt.close()
 
 
 def test_title_contains_invalid_title_type(pt_line_plt):
     """Check title_contains raises value error when given invalid title type"""
-    with pytest.raises(
-        ValueError, match="title_type must be one of the following"
-    ):
+    with pytest.raises(ValueError, match="title_type must be one of the following"):
         pt_line_plt.assert_title_contains(["Title"], title_type="all")
     plt.close()
 
 
 def test_title_contains_figure(pt_line_plt):
     """Check title_contains tester for figure/sup title"""
-    pt_line_plt.assert_title_contains(
-        ["My", "Figure", "Title"], title_type="figure"
-    )
+    pt_line_plt.assert_title_contains(["My", "Figure", "Title"], title_type="figure")
     plt.close()
 
 
 def test_title_contains_figure_nosuptitle(pt_bar_plt):
     """Check title_contains tester for figure title fails when there is no
     suptitle"""
-    with pytest.raises(
-        AssertionError, match="Expected title is not displayed"
-    ):
-        pt_bar_plt.assert_title_contains(
-            ["My", "Figure", "Title"], title_type="figure"
-        )
+    with pytest.raises(AssertionError, match="Expected title is not displayed"):
+        pt_bar_plt.assert_title_contains(["My", "Figure", "Title"], title_type="figure")
     plt.close()
 
 

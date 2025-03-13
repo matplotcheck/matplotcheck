@@ -56,9 +56,7 @@ def error_test(n, n_exp):
     if n == n_exp:
         print("ERRORS TEST: PASSED!")
     else:
-        print(
-            "ERRORS TEST: FAILED!", n, "of", n_exp, "Cells ran without errors"
-        )
+        print("ERRORS TEST: FAILED!", n, "of", n_exp, "Cells ran without errors")
 
 
 def remove_comments(input_string):

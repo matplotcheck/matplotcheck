@@ -107,9 +107,7 @@ ax.hist(data, bins=8, color="orange")
 # Test the student submitted histogram bin values against the expected
 # bin values (the correct answer to the assigned plot)
 plot_tester_testing = mpc.PlotTester(ax)
-plot_tester_testing.assert_bin_values(
-    [23.0, 10.0, 8.0, 9.0, 9.0, 8.0, 10.0, 23.0]
-)
+plot_tester_testing.assert_bin_values([23.0, 10.0, 8.0, 9.0, 9.0, 8.0, 10.0, 23.0])
 
 ###############################################################################
 # Above, ``assert_bin_values()`` did not raise an ``AssertionError``. This

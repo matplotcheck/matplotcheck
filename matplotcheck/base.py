@@ -900,7 +900,7 @@ class PlotTester(object):
                 np.testing.assert_array_almost_equal(
                     xy_data["x"].to_numpy(dtype=np.float64),
                     xy_expected[xcol].to_numpy(dtype=np.float64),
-                    decimal=10
+                    decimal=10,
                 )
             except AssertionError:
                 # xy_data and xy_expected do not contain the same data
@@ -912,7 +912,7 @@ class PlotTester(object):
                 np.testing.assert_array_almost_equal(
                     xy_data["y"].to_numpy(dtype=np.float64),
                     xy_expected[ycol].to_numpy(dtype=np.float64),
-                    decimal=10
+                    decimal=10,
                 )
 
             except AssertionError:

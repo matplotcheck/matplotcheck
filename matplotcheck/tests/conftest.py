@@ -12,7 +12,10 @@ from matplotcheck.base import PlotTester
 @pytest.fixture
 def pd_df():
     """Create a pandas dataframe for testing"""
-    return pd.DataFrame({"A": np.arange(100), "B": np.random.randint(0, 100, size=100)}, dtype=np.float64)
+    return pd.DataFrame(
+        {"A": np.arange(100), "B": np.random.randint(0, 100, size=100)},
+        dtype=np.float64,
+    )
 
 
 @pytest.fixture

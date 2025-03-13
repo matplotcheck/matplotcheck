@@ -3,7 +3,7 @@
 # MatPlotCheck
 ![PyPI](https://img.shields.io/pypi/v/matplotcheck.svg?color=purple&style=plastic)
 
-[![codecov](https://codecov.io/gh/matplotcheck/matplotcheck/branch/master/graph/badge.svg)](https://codecov.io/gh/earthlab/matplotcheck)
+[![codecov](https://codecov.io/gh/matplotcheck/matplotcheck/branch/master/graph/badge.svg)](https://codecov.io/gh/matplotcheck/matplotcheck)
 [![Documentation Status](https://readthedocs.org/projects/matplotcheck2/badge/?version=latest)](https://matplotcheck.readthedocs.io/en/latest/?badge=latest)
 
 A package for testing different types of matplotlib plots including:

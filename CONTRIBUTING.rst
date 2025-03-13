@@ -8,7 +8,7 @@ Ready to contribute? Here's how to set up MatPlotCheck for local development.
 --------------------------------
 
 To create your own copy of the repository on GitHub, navigate to the
-`earthlab/matplotcheck <https://github.com/earthlab/matplotcheck>`_ repository
+`matplotcheck/matplotcheck <https://github.com/matplotcheck/matplotcheck>`_ repository
 and click the **Fork** button in the top-right corner of the page.
 
 2. Clone your fork locally
@@ -26,26 +26,16 @@ local filesystem::
 Create an environment
 ^^^^^^^^^^^^^^^^^^^^^
 
-Using conda, there are two options.
-
-1. The easiest option is to create an environment from the
-``environment.yml`` file.
-Note that this will only allow you to test against one version of python
-locally, but this is the recommended option on Windows and MacOS::
-
-    $ conda env create -f environment.yml
-    $ conda activate matplotcheck-dev
-
+We reccommend using `uv` to manage your virtual environments.
 
 Install the package
 ^^^^^^^^^^^^^^^^^^^
 
 Once your matplotcheck-dev environment is activated, install MatPlotCheck in editable
-mode, along with the development requirements and pre-commit hooks::
+mode, along with the development requirements::
 
-    $ pip install -e .
-    $ pip install -r dev-requirements.txt
-    $ pre-commit install
+    $ uv sync --dev
+    $ source .venv/bin/activate
 
 4. Create a branch for local development
 ----------------------------------------
@@ -118,14 +108,9 @@ e.g.,::
 Code style
 ==========
 
-- MatPlotCheck currently only supports Python 3 (3.6+). Please test code locally
-  in Python 3 when possible (all supported versions will be automatically
-  tested on Travis CI).
+- MatPlotCheck currently only supports Python 3 (3.10+).
 
-- MatPlotCheck uses a pre-commit hook that runs the black code autoformatter.
-  Be sure to execute `pre-commit install` as described above, which will cause
-  black to autoformat code prior to commits. If this step is skipped, black
-  may cause build failures on Travis CI due to formatting issues.
+- MatPlotCheck adheres to the ruff formatting and style guidelines.
 
 - Follow `PEP 8 <https://www.python.org/dev/peps/pep-0008/>`_ when possible.
   Some standards that we follow include:
@@ -145,21 +130,6 @@ Code style
 
 Deploying
 =========
-
-A reminder for the maintainers on how to deploy.
-Make sure all your changes are committed, then run::
-
-    $ bumpversion patch # possible: major / minor / patch
-
-This will increment the version according to a major release (e.g., 0.1.0 to
-1.0.0), a minor release (e.g., 0.1.0 to 0.2.0), or a patch (e.g., 0.1.0 to
-0.1.1), following the guidelines for semantic versioning: https://semver.org/.
-
-
-Bumpversion updates the version number throughout the
-package, and generates a git commit along with an associated git tag for the
-new version.
-For more on bumpversion, see: https://github.com/peritus/bumpversion
 
 To deploy MatPlotCheck,
 

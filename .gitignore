@@ -28,7 +28,13 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-uv.lock
 
 # mkdocs documentation
 /site
+
+# test coverage
+coverage.xml
+.coverage
+
+# editor files
+.vscode/

@@ -2,15 +2,9 @@
 
 # MatPlotCheck
 ![PyPI](https://img.shields.io/pypi/v/matplotcheck.svg?color=purple&style=plastic)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/matplotcheck.svg?color=purple&label=pypi%20downloads&style=plastic)
-![Conda](https://img.shields.io/conda/v/conda-forge/matplotcheck.svg?color=purple&style=plastic)
-![Conda](https://img.shields.io/conda/dn/conda-forge/matplotcheck.svg?color=purple&label=conda-forge%20downloads&style=plastic)
 
-[![Build Status](https://travis-ci.com/earthlab/matplotcheck.svg?branch=master)](https://travis-ci.com/earthlab/matplotcheck)
-[![Build status](https://ci.appveyor.com/api/projects/status/xgf5g4ms8qhgtp21?svg=true)](https://ci.appveyor.com/project/earthlab/matplotcheck)
-[![codecov](https://codecov.io/gh/earthlab/matPlotCheck/branch/master/graph/badge.svg)](https://codecov.io/gh/earthlab/matPlotCheck)
-[![Documentation Status](https://readthedocs.org/projects/matplotcheck/badge/?version=latest)](https://matplotcheck.readthedocs.io/en/latest/?badge=latest)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://img.shields.io/badge/code%20style-black-000000.svg)
+[![codecov](https://codecov.io/gh/matplotcheck/matplotcheck/branch/master/graph/badge.svg)](https://codecov.io/gh/matplotcheck/matplotcheck)
+[![Documentation Status](https://readthedocs.org/projects/matplotcheck2/badge/?version=latest)](https://matplotcheck.readthedocs.io/en/latest/?badge=latest)
 
 A package for testing different types of matplotlib plots including:
 
@@ -37,13 +31,10 @@ We spoke with her about our development and decided to extend plotChecker to sui
 
 ## Install MatPlotCheck
 
-You can install MatPlotCheck using either pip or conda.
+You can install MatPlotCheck using pip.
 To use pip run:
 
 `pip install --upgrade matplotcheck`
-
-To use conda:
-`conda install -c conda-forge matplotcheck`
 
 To import it into Python:
 
@@ -64,9 +55,9 @@ import pandas as pd
 import unittest
 
 axis = plt.gca()
-data = pd.DataFrame(data={“x”:xvals, “y”:yvals})
-suite = PlotBasicSuite(ax=axis, data_exp=data, xcol=”x”, ycol=”y”)
-xlabel_contains=[“x”], ylabel_contains = [“y”,”data”])
+data = pd.DataFrame(data={"x":xvals, "y":yvals})
+suite = PlotBasicSuite(ax=axis, data_exp=data, xcol="x", ycol="y")
+xlabel_contains=["x"], ylabel_contains = ["y","data"])
 results = unittest.TextTestRunner().run(suite)
 ```
 
@@ -90,10 +81,10 @@ from matplotcheck.base import PlotTester
 import pandas as pd
 axis = plt.gca()
 pt = PlotTester(axis)
-data = pd.DataFrame(data={“x”:xvals, “y”:yvals})
-pt.assert_xydata(data, “x”, “y”)
-pt.assert_xlabel_contains([“x”])
-pt.assert_ylabel_contains([“y”, “data”])
+data = pd.DataFrame(data={"x":xvals, "y":yvals})
+pt.assert_xydata(data, "x", "y")
+pt.assert_xlabel_contains(["x"])
+pt.assert_ylabel_contains(["y", "data"])
 ```
 
 Plot containing a spatial raster image and spatial polygon vector data
@@ -113,14 +104,15 @@ Please feel free to submit bugs!
 
 ## Active Contributors
 
-<a title="Leah Wasser" href="https://www.github.com/lwasser"><img width="60" height="60" alt="Leah Wasser" class="pull-left" src="https://avatars2.githubusercontent.com/u/7649194?s=460&v=4" /></a>
-<a title="Nathan Korinek" href="https://www.github.com/nkorinek"><img width="60" height="60" alt="Nathan Korinek" class="pull-left" src="https://avatars3.githubusercontent.com/u/38253680?s=460&v=4" /></a>
+<a title="Peter Stenger" href="https://www.github.com/reteps"><img width="60" height="60" alt="Peter Stenger" class="pull-left" src="https://avatars2.githubusercontent.com/u/13869303?s=460&v=4" /></a>
 
 ## Contributors
 
 We've welcome any and all contributions. Below are some of the
 contributors to MatPlotCheck.
 
+<a title="Leah Wasser" href="https://www.github.com/lwasser"><img width="60" height="60" alt="Leah Wasser" class="pull-left" src="https://avatars2.githubusercontent.com/u/7649194?s=460&v=4" /></a>
+<a title="Nathan Korinek" href="https://www.github.com/nkorinek"><img width="60" height="60" alt="Nathan Korinek" class="pull-left" src="https://avatars3.githubusercontent.com/u/38253680?s=460&v=4" /></a>
 <a title="Ryan Larocque" href="https://www.github.com/ryla5068"><img width="60" height="60" alt="Ryan Larocque" class="pull-left" src="https://avatars.githubusercontent.com/u/43677611?size=120" /></a>
 <a title="Kylen Solvik" href="https://www.github.com/kysolvik"><img width="60" height="60" alt="Kylen Solvik" class="pull-left" src="https://avatars.githubusercontent.com/u/24379590?size=120" /></a>
 <a title="Kristen Curry" href="https://www.github.com/kdcurry"><img width="60" height="60" alt="Kristen Curry" class="pull-left" src="https://avatars.githubusercontent.com/u/4032126?size=120" /></a>

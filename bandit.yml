@@ -1,2 +1,0 @@
-# this suppresses the error messages about using asserts in tests
-skips: ['B101']

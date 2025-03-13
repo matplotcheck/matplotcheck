@@ -17,7 +17,7 @@ def multi_line_gdf(two_line_gdf):
     This has one multi line and another regular line.
     """
     # Create a single and multi line object
-    multiline_feat = two_line_gdf.unary_union
+    multiline_feat = two_line_gdf.union_all()
     linec = LineString([(2, 1), (3, 1), (4, 1), (5, 2)])
     out_df = gpd.GeoDataFrame(
         geometry=gpd.GeoSeries([multiline_feat, linec]),

@@ -26,7 +26,7 @@ def multi_polygon_gdf(basic_polygon):
         crs="epsg:4326",
     )
     multi_gdf = gpd.GeoDataFrame(
-        geometry=gpd.GeoSeries(gdf.unary_union), crs="epsg:4326"
+        geometry=gpd.GeoSeries(gdf.union_all()), crs="epsg:4326"
     )
     return multi_gdf
 

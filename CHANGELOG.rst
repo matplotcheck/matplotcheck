@@ -6,10 +6,11 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`_, and this project adheres to
 `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
 
-Unreleased
+0.2.0
 ----------
 
-- Added .buffer(0) to the multipolygons in pytest to account for GeoPandas update (@nkorinek, #401)
+- Rebuild of the MatPlotCheck package to support modern Python and libraries. (@reteps, #2, #3)
+- Added .buffer(0) to the multipolygons in pytest to account for GeoPandas update (@nkorinek, earthlab #401)
 
 0.1.4
 ----------

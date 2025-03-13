@@ -60,7 +60,7 @@ class VectorTester(PlotTester):
         sorted list where each list represents all points with the same color.
         each point is represented by a tuple with its coordinates.
         """
-        points_dataframe = pd.DataFrame(columns=["offset", "color", "msize", "mstyle"])
+        points_dataframe = None
         for c in (
             coll
             for coll in self.ax.collections
@@ -80,20 +80,30 @@ class VectorTester(PlotTester):
                 self._convert_length(sizes, n),
                 self._convert_length(styles, n),
             )
-            points_dataframe = pd.concat(
-                [
-                    points_dataframe,
-                    pd.DataFrame(
-                        {
-                            "offset": offsets,
-                            "color": colors,
-                            "msize": sizes,
-                            "mstyle": styles,
-                        }
-                    ),
-                ],
-                ignore_index=True,
-            )
+            if points_dataframe is None:
+                points_dataframe = pd.DataFrame(
+                    {
+                        "offset": offsets,
+                        "color": colors,
+                        "msize": sizes,
+                        "mstyle": styles,
+                    }
+                )
+            else:
+                points_dataframe = pd.concat(
+                    [
+                        points_dataframe,
+                        pd.DataFrame(
+                            {
+                                "offset": offsets,
+                                "color": colors,
+                                "msize": sizes,
+                                "mstyle": styles,
+                            }
+                        ),
+                    ],
+                    ignore_index=True,
+                )
 
         points_grouped = [
             [data["offset"][i] for i in data.index]
@@ -136,7 +146,7 @@ class VectorTester(PlotTester):
         pandas dataframe with columns x, y, point_size. Each row reprsents a
         point on Axes ax with location x,y and markersize pointsize
         """
-        df = pd.DataFrame(columns=("x", "y", "markersize"))
+        df = None
         for c in self.ax.collections:
             if isinstance(c, matplotlib.collections.PathCollection):
                 offsets, markersizes = c.get_offsets(), c.get_sizes()
@@ -149,12 +159,18 @@ class VectorTester(PlotTester):
                     df2 = pd.DataFrame(
                         {"x": x_data, "y": y_data, "markersize": markersize}
                     )
-                    df = pd.concat([df, df2], ignore_index=True)
+                    if df is None:
+                        df = df2
+                    else:
+                        df = pd.concat([df, df2], ignore_index=True)
                 elif len(markersizes) == len(offsets):
                     df2 = pd.DataFrame(
                         {"x": x_data, "y": y_data, "markersize": markersizes}
                     )
-                    df = pd.concat([df, df2], ignore_index=True)
+                    if df is None:
+                        df = df2
+                    else:
+                        df = pd.concat([df, df2], ignore_index=True)
         df = df.sort_values(by="markersize").reset_index(drop=True)
         return df
 
@@ -345,7 +361,7 @@ class VectorTester(PlotTester):
         sorted list where each list represents all lines with the same
         attributes
         """
-        lines_dataframe = pd.DataFrame(columns=["seg", "color", "lwidth", "lstyle"])
+        lines_dataframe = None
         for c in (
             coll
             for coll in self.ax.collections
@@ -363,20 +379,30 @@ class VectorTester(PlotTester):
                 self._convert_length(widths, n),
                 self._convert_length(styles, n),
             )
-            lines_dataframe = pd.concat(
-                [
-                    lines_dataframe,
-                    pd.DataFrame(
-                        {
-                            "seg": segs,
-                            "color": colors,
-                            "lwidth": widths,
-                            "lstyle": styles,
-                        }
-                    ),
-                ],
-                ignore_index=True,
-            )
+            if lines_dataframe is None:
+                lines_dataframe = pd.DataFrame(
+                    {
+                        "seg": segs,
+                        "color": colors,
+                        "lwidth": widths,
+                        "lstyle": styles,
+                    }
+                )
+            else:
+                lines_dataframe = pd.concat(
+                    [
+                        lines_dataframe,
+                        pd.DataFrame(
+                            {
+                                "seg": segs,
+                                "color": colors,
+                                "lwidth": widths,
+                                "lstyle": styles,
+                            }
+                        ),
+                    ],
+                    ignore_index=True,
+                )
 
         lines_grouped = [
             [data["seg"][i] for i in data.index]

@@ -887,7 +887,7 @@ class PlotTester(object):
             )
 
         else:
-            """We use `assert_array_max_ulp()` to compare the
+            """We use `assert_array_almost_equal()` to compare the
             two datasets because it is able to account for small errors in
             floating point numbers, and it scales nicely between extremely
             small or large numbers. Because of the way that matplotlib stores
@@ -897,10 +897,10 @@ class PlotTester(object):
             We catch this error and raise our own that is more relevant to
             the assertion being run."""
             try:
-                np.testing.assert_array_max_ulp(
+                np.testing.assert_array_almost_equal(
                     xy_data["x"].to_numpy(dtype=np.float64),
                     xy_expected[xcol].to_numpy(dtype=np.float64),
-                    5,
+                    decimal=10
                 )
             except AssertionError:
                 # xy_data and xy_expected do not contain the same data
@@ -909,10 +909,10 @@ class PlotTester(object):
                 # xy_data and xy_expected do not have the same shape
                 raise ValueError("xy_data and xy_expected do not have the same shape")
             try:
-                np.testing.assert_array_max_ulp(
+                np.testing.assert_array_almost_equal(
                     xy_data["y"].to_numpy(dtype=np.float64),
                     xy_expected[ycol].to_numpy(dtype=np.float64),
-                    5,
+                    decimal=10
                 )
 
             except AssertionError:

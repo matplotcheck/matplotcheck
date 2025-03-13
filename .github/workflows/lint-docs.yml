@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest", "macos-latest"]
-        python-version: [3.8]
+        python-version: [3.10]
 
     steps:
     - uses: actions/checkout@master
@@ -29,7 +29,7 @@ jobs:
     - name: "Set up Python"
       uses: actions/setup-python@v5
       with:
-        python-version-file: "pyproject.toml"
+        python-version: ${{ matrix.python-version }}
     - name: Install the project
       run: uv sync --dev
     - name: Build Docs
@@ -38,5 +38,5 @@ jobs:
         make build-docs -B
     - name: Run ruff
       run: |
-        uv run ruff check
-        uv ruh ruff format --check
+        uv run -- ruff check
+        uv ruh -- ruff format --check

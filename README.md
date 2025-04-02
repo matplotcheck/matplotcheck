@@ -34,7 +34,12 @@ We spoke with her about our development and decided to extend plotChecker to sui
 You can install MatPlotCheck using pip.
 To use pip run:
 
-`pip install --upgrade matplotcheck`
+```sh
+pip install --upgrade matplotcheck2
+```
+
+> [!NOTE]  
+> This fork takes over the original matplotcheck package. The original package is no longer maintained and will not be updated. See <https://github.com/earthlab/matplotcheck/pull/429>
 
 To import it into Python:
 

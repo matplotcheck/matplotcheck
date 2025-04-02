@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "matplotcheck"
+name = "matplotcheck2"
 version = "0.2.0"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -34,7 +34,7 @@ classifiers=[
 ]
 
 [project.urls]
-documentation = "https://matplotcheck.readthedocs.io/en/latest/"
+documentation = "https://matplotcheck2.readthedocs.io/en/latest/"
 homepage = "https://github.com/matplotcheck/matplotcheck"
 source = "https://github.com/matplotcheck/matplotcheck"
 

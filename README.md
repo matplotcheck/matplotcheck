@@ -1,10 +1,9 @@
-[![DOI](https://zenodo.org/badge/138660604.svg)](https://zenodo.org/badge/latestdoi/138660604)
-
 # MatPlotCheck
-![PyPI](https://img.shields.io/pypi/v/matplotcheck.svg?color=purple&style=plastic)
 
+[![PyPI](https://img.shields.io/pypi/v/matplotcheck2.svg?color=purple&style=plastic)](https://pypi.org/project/matplotcheck2/)
 [![codecov](https://codecov.io/gh/matplotcheck/matplotcheck/branch/main/graph/badge.svg)](https://codecov.io/gh/matplotcheck/matplotcheck)
-[![Documentation Status](https://readthedocs.org/projects/matplotcheck2/badge/?version=latest)](https://matplotcheck2.readthedocs.io/en/latest/)
+[![Documentation](https://readthedocs.org/projects/matplotcheck2/badge/?version=latest)](https://matplotcheck2.readthedocs.io/en/latest/)
+[![DOI](https://zenodo.org/badge/138660604.svg)](https://zenodo.org/badge/latestdoi/138660604)
 
 A package for testing different types of matplotlib plots including:
 
@@ -45,10 +44,6 @@ To import it into Python:
 
 `import matplotcheck as mpc`
 
-
-## Under Development
-
-Matplotcheck is currently under significant development.
 
 ## Examples
 
@@ -106,6 +101,10 @@ vt.assert_polygons(polygons_expected=polygons)
 
 Caveats: This repo likely misses edge cases of the many ways matplotlib plots can be created.
 Please feel free to submit bugs!
+
+## Documentation
+
+Documentation is available at [matplotcheck2.readthedocs.io](https://matplotcheck2.readthedocs.io/en/latest/).
 
 ## Active Contributors
 

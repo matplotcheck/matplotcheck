@@ -7,14 +7,39 @@ whether they are spatial or not.
 
 """
 
-import numpy as np
-import matplotlib
-from matplotlib.backend_bases import RendererBase
+from __future__ import annotations
+
 import math
-from scipy import stats
-import pandas as pd
 import numbers
-import geopandas as gpd
+from typing import Union, Optional, TYPE_CHECKING
+
+import matplotlib
+import matplotlib.axes
+import matplotlib.legend
+import matplotlib.text
+import numpy as np
+import pandas as pd
+from matplotlib.backend_bases import RendererBase
+from numpy.typing import NDArray
+
+# Optional imports
+try:
+    import geopandas as gpd
+
+    HAS_GEOPANDAS = True
+except ImportError:
+    HAS_GEOPANDAS = False
+    if TYPE_CHECKING:
+        import geopandas as gpd
+
+try:
+    from scipy import stats
+
+    HAS_SCIPY = True
+except ImportError:
+    HAS_SCIPY = False
+    if TYPE_CHECKING:
+        from scipy import stats
 
 
 class InvalidPlotError(Exception):
@@ -32,11 +57,11 @@ class PlotTester(object):
 
     """
 
-    def __init__(self, ax):
+    def __init__(self, ax: matplotlib.axes.Axes) -> None:
         """Initialize TestPlot object"""
-        self.ax = ax
+        self.ax: matplotlib.axes.Axes = ax
 
-    def _is_line(self):
+    def _is_line(self) -> bool:
         """Boolean expressing if ax contains scatter points.
         If plot contains scatter points and lines return True.
 
@@ -54,8 +79,9 @@ class PlotTester(object):
                     or line.get_linewidth() > 0
                 ):
                     return True
+        return False
 
-    def _is_scatter(self):
+    def _is_scatter(self) -> bool:
         """Boolean expressing if ax contains scatter points.
         If plot contains scatter points as well as lines, functions will return
         true.
@@ -79,11 +105,11 @@ class PlotTester(object):
 
     def assert_string_contains(
         self,
-        string,
-        strings_expected,
-        message_default="String does not contain expected string: {0}",
-        message_or="String does not contain at least one of: {0}",
-    ):
+        string: str,
+        strings_expected: Optional[Union[str, list[Union[str, list[str]]]]],
+        message_default: str = "String does not contain expected string: {0}",
+        message_or: str = "String does not contain at least one of: {0}",
+    ) -> None:
         """Asserts that `string` contains the expected strings from
         `strings_expected`.
 
@@ -131,7 +157,7 @@ class PlotTester(object):
                 if check.lower().replace(" ", "") not in string:
                     raise AssertionError(message_default.format(check))
             elif isinstance(check, list):
-                if not any([c.lower().replace(" ", "") in string for c in check]):
+                if not any(c.lower().replace(" ", "") in string for c in check):
                     if len(check) == 1:
                         raise AssertionError(message_default.format(check[0]))
                     else:
@@ -139,7 +165,11 @@ class PlotTester(object):
             else:
                 raise ValueError("str_lst must be a list of: lists or strings.")
 
-    def assert_plot_type(self, plot_type=None, message="Plot is not of type {0}"):
+    def assert_plot_type(
+        self,
+        plot_type: Optional[str] = None,
+        message: str = "Plot is not of type {0}",
+    ) -> None:
         """Asserts Axes `ax` contains the type of plot specified in `plot_type`.
         if `plot_type` is ``None``, assertion is passed.
 
@@ -172,7 +202,7 @@ class PlotTester(object):
 
     """ TITLES TESTS/HELPER FUNCTIONS """
 
-    def get_titles(self):
+    def get_titles(self) -> tuple[str, str]:
         """Returns the suptitle (Figure title) and axes title of `ax`.
 
         Returns
@@ -183,19 +213,20 @@ class PlotTester(object):
         title : string
             Title on the axes. If title is ``None``, this is an empty string.
         """
-        fig, suptitle = self.ax.get_figure(), ""
-        if fig._suptitle:
-            suptitle += fig._suptitle.get_text()
+        fig = self.ax.get_figure()
+        suptitle = ""
+        if fig and hasattr(fig, "_suptitle") and fig._suptitle:  # type: ignore[attr-defined]
+            suptitle += fig._suptitle.get_text()  # type: ignore[attr-defined]
         return suptitle, self.ax.get_title()
 
     def assert_title_contains(
         self,
-        strings_expected,
-        title_type="either",
-        message_default="Title does not contain expected string: {0}",
-        message_or="Title does not contain at least one of: {0}",
-        message_no_title="Expected title is not displayed",
-    ):
+        strings_expected: Optional[Union[str, list[Union[str, list[str]]]]],
+        title_type: str = "either",
+        message_default: str = "Title does not contain expected string: {0}",
+        message_or: str = "Title does not contain at least one of: {0}",
+        message_no_title: str = "Expected title is not displayed",
+    ) -> None:
         """Asserts that title defined by `title_type` contains the expected
         strings from `strings_expected`.
 
@@ -262,7 +293,7 @@ class PlotTester(object):
 
     """CAPTION TEST/HELPER FUNCTIONS """
 
-    def get_caption(self):
+    def get_caption(self) -> Optional[str]:
         """Returns the text that is located in the bottom right, just below the
         right side of ax
         If no text is found in location, ``None`` is returned.
@@ -273,26 +304,28 @@ class PlotTester(object):
             the text that is found in bottom right, ``None`` if no text is
             found
         """
-        caption = None
+        caption: Optional[Union[str, matplotlib.text.Text]] = None
         ax_position = self.ax.get_position()
-        for tex in self.ax.get_figure().texts:
-            tex_position = tex.get_position()
-            if (ax_position.ymin - 0.1 < tex_position[1] < ax_position.ymin) and (
-                ax_position.xmax - 0.5 < tex_position[0] < ax_position.xmax
-            ):
-                caption = tex
-                break
+        fig = self.ax.get_figure()
+        if fig:
+            for tex in fig.texts:
+                tex_position = tex.get_position()
+                if (ax_position.ymin - 0.1 < tex_position[1] < ax_position.ymin) and (
+                    ax_position.xmax - 0.5 < tex_position[0] < ax_position.xmax
+                ):
+                    caption = tex
+                    break
         if isinstance(caption, matplotlib.text.Text):
             caption = caption.get_text()
         return caption
 
     def assert_caption_contains(
         self,
-        strings_expected,
-        message_default="Caption does not contain expected string: {0}",
-        message_or="Caption does not contain at least one of: {0}",
-        message_no_caption="No caption exists in appropriate location",
-    ):
+        strings_expected: Optional[Union[str, list[Union[str, list[str]]]]],
+        message_default: str = "Caption does not contain expected string: {0}",
+        message_or: str = "Caption does not contain at least one of: {0}",
+        message_no_caption: str = "No caption exists in appropriate location",
+    ) -> None:
         """
         Asserts that caption contains expected strings from `strings_expected`.
 
@@ -343,7 +376,9 @@ class PlotTester(object):
 
     """ AXIS TEST/HELPER FUNCTIONS """
 
-    def assert_axis_off(self, message="Axis lines are displayed on plot"):
+    def assert_axis_off(
+        self, message: str = "Axis lines are displayed on plot"
+    ) -> None:
         """Asserts one of the three cases holds true with error message m:
         1) axis have been turned off
         2) both x and y axis have visibility set to false
@@ -364,7 +399,9 @@ class PlotTester(object):
         if not self.ax.axison:
             flag = True
         # Case 2: Check if both axis visibilities set to false
-        elif not self.ax.xaxis._visible and not self.ax.yaxis._visible:
+        elif not getattr(self.ax.xaxis, "_visible", True) and not getattr(
+            self.ax.yaxis, "_visible", True
+        ):
             flag = True
         # Case 3: Check if both axis ticks are set to empty lists
         elif (
@@ -376,12 +413,12 @@ class PlotTester(object):
 
     def assert_axis_label_contains(
         self,
-        axis="x",
-        strings_expected=None,
-        message_default="{1}-axis label does not contain expected string: {0}",
-        message_or="{1}-axis label does not contain at least one of: {0}",
-        message_not_displayed="Expected {0} axis label is not displayed",
-    ):
+        axis: str = "x",
+        strings_expected: Optional[Union[str, list[Union[str, list[str]]]]] = None,
+        message_default: str = "{1}-axis label does not contain expected string: {0}",
+        message_or: str = "{1}-axis label does not contain at least one of: {0}",
+        message_not_displayed: str = "Expected {0} axis label is not displayed",
+    ) -> None:
         """
         Asserts that the axis label contains the expected strings from
         `strings_expected`. Tests x or y axis based on 'axis' param.
@@ -447,10 +484,10 @@ class PlotTester(object):
 
     def assert_lims(
         self,
-        lims_expected,
-        axis="x",
-        message="Incorrect limits on the {0} axis",
-    ):
+        lims_expected: list[Union[int, float]],
+        axis: str = "x",
+        message: str = "Incorrect limits on the {0} axis",
+    ) -> None:
         """Assert the lims of ax match lims_expected. Tests x or y axis based on
         'axis' param
 
@@ -484,11 +521,11 @@ class PlotTester(object):
 
     def assert_lims_range(
         self,
-        lims_range,
-        axis="x",
-        message_min="Incorrect min limit on the {0} axis",
-        message_max="Incorrect max limit on the {0} axis",
-    ):
+        lims_range: tuple[tuple[float, float], tuple[float, float]],
+        axis: str = "x",
+        message_min: str = "Incorrect min limit on the {0} axis",
+        message_max: str = "Incorrect max limit on the {0} axis",
+    ) -> None:
         """Asserts axis limits fall within lims_range (INCLUSIVE).
 
         Parameters
@@ -527,7 +564,9 @@ class PlotTester(object):
         # Check if the max falls with in lims_range[1]
         assert lims_range[1][0] <= lims[1] <= lims_range[1][1], message_max.format(axis)
 
-    def assert_equal_xlims_ylims(self, message="xlims and ylims are not equal"):
+    def assert_equal_xlims_ylims(
+        self, message: str = "xlims and ylims are not equal"
+    ) -> None:
         """Assert the x and y lims of Axes ax are exactly equal to each other
 
         Parameters
@@ -548,7 +587,7 @@ class PlotTester(object):
 
     """ LEGEND TESTS """
 
-    def get_legends(self):
+    def get_legends(self) -> list[matplotlib.legend.Legend]:
         """Retrieve the list of legends on ax
 
         Returns
@@ -560,11 +599,11 @@ class PlotTester(object):
 
     def assert_legend_titles(
         self,
-        titles_exp,
-        message="Legend title does not contain expected string: {0}",
-        message_num_titles="I was expecting {0} legend titles but instead "
+        titles_exp: list[str],
+        message: str = "Legend title does not contain expected string: {0}",
+        message_num_titles: str = "I was expecting {0} legend titles but instead "
         + "found {1}",
-    ):
+    ) -> None:
         """Asserts legend titles contain expected text in titles_exp list.
 
         Parameters
@@ -611,12 +650,12 @@ class PlotTester(object):
 
     def assert_legend_labels(
         self,
-        labels_exp,
-        message="Legend does not have expected labels",
-        message_no_legend="Legend does not exist",
-        message_num_labels="I was expecting {0} legend entries, but found "
+        labels_exp: list[str],
+        message: str = "Legend does not have expected labels",
+        message_no_legend: str = "Legend does not exist",
+        message_num_labels: str = "I was expecting {0} legend entries, but found "
         + "{1}. Are there extra labels in your legend?",
-    ):
+    ) -> None:
         """Asserts legends on ax have the correct entry labels
 
         Parameters
@@ -663,7 +702,9 @@ class PlotTester(object):
         )
         assert set(legend_texts) == set(labels_exp), message
 
-    def assert_legend_no_overlay_content(self, message="Legend overlays plot window"):
+    def assert_legend_no_overlay_content(
+        self, message: str = "Legend overlays plot window"
+    ) -> None:
         """Asserts that each legend does not overlay plot window
 
         Parameters
@@ -688,7 +729,7 @@ class PlotTester(object):
             legend_below = leg_extent[1][1] < plot_extent[0][1]
             assert legend_left or legend_right or legend_below, message
 
-    def legends_overlap(self, b1, b2):
+    def legends_overlap(self, b1: NDArray[np.float64], b2: NDArray[np.float64]) -> bool:
         """Helper function for assert_no_legend_overlap.
         True if points of window extents for b1 and b2 overlap, False otherwise
 
@@ -704,15 +745,17 @@ class PlotTester(object):
         overlap : boolean
             True if bounding boxes b1 and b2 overlap
         """
-        x_overlap = (b1[0][0] <= b2[1][0] and b1[0][0] >= b2[0][0]) or (
+        x_overlap: bool = (b1[0][0] <= b2[1][0] and b1[0][0] >= b2[0][0]) or (
             b1[1][0] <= b2[1][0] and b1[1][0] >= b2[0][0]
         )
-        y_overlap = (b1[0][1] <= b2[1][1] and b1[0][1] >= b2[0][1]) or (
+        y_overlap: bool = (b1[0][1] <= b2[1][1] and b1[0][1] >= b2[0][1]) or (
             b1[1][1] <= b2[1][1] and b1[1][1] >= b2[0][1]
         )
         return x_overlap and y_overlap
 
-    def assert_no_legend_overlap(self, message="Legends overlap eachother"):
+    def assert_no_legend_overlap(
+        self, message: str = "Legends overlap eachother"
+    ) -> None:
         """When multiple legends on ax, asserts that there are no two legends
         in ax that overlap each other
 
@@ -738,7 +781,7 @@ class PlotTester(object):
 
     """ BASIC PLOT DATA FUNCTIONS """
 
-    def get_xy(self, points_only=False):
+    def get_xy(self, points_only: bool = False) -> pd.DataFrame:
         """Returns a pandas dataframe with columns "x" and "y" holding the x
         and y coords on Axes `ax`
 
@@ -761,24 +804,34 @@ class PlotTester(object):
                 val
                 for line in self.ax.lines
                 if (line.get_linestyle() == "None" or line.get_linewidth() == "None")
-                for val in line.get_xydata()
+                for val in line.get_xydata()  # type: ignore[union-attr]
             ]  # .plot()
             xy_coords += [
                 val
                 for c in self.ax.collections
                 if not isinstance(c, matplotlib.collections.PolyCollection)
-                for val in c.get_offsets()
+                for val in c.get_offsets()  # type: ignore[union-attr]
             ]  # .scatter()
 
         else:
             xy_coords = [
-                val for line in self.ax.lines for val in line.get_xydata()
+                val
+                for line in self.ax.lines
+                for val in line.get_xydata()  # type: ignore[union-attr]
             ]  # .plot()
             xy_coords += [
-                val for c in self.ax.collections for val in c.get_offsets()
+                val
+                for c in self.ax.collections
+                for val in c.get_offsets()  # type: ignore[union-attr]
             ]  # .scatter()
             xy_coords += [
-                [(p.get_x() + (p.get_width() / 2)), p.get_height()]
+                [
+                    (
+                        getattr(p, "get_x", lambda: 0)()
+                        + (getattr(p, "get_width", lambda: 0)() / 2)
+                    ),
+                    getattr(p, "get_height", lambda: 0)(),
+                ]
                 for p in self.ax.patches
             ]  # .bar()
 
@@ -793,14 +846,14 @@ class PlotTester(object):
 
     def assert_xydata(
         self,
-        xy_expected,
-        xcol=None,
-        ycol=None,
-        points_only=False,
-        xlabels=False,
-        tolerance=0,
-        message="Incorrect data values",
-    ):
+        xy_expected: Optional[Union[pd.DataFrame, gpd.GeoDataFrame]],
+        xcol: Optional[str] = None,
+        ycol: Optional[str] = None,
+        points_only: bool = False,
+        xlabels: bool = False,
+        tolerance: float = 0,
+        message: str = "Incorrect data values",
+    ) -> None:
         """Asserts that the x and y data of Axes `ax` matches `xy_expected`
         with error message `message`. If ``xy_expected = None``,
         assertion is passed.
@@ -852,7 +905,11 @@ class PlotTester(object):
         # If xy_expected is a GeoDataFrame, then we make is a normal DataFrame
         # with the coordinates of the geometry in that GeoDataFrame as the x
         # and y data
-        if isinstance(xy_expected, gpd.geodataframe.GeoDataFrame) and not xcol:
+        if (
+            HAS_GEOPANDAS
+            and isinstance(xy_expected, gpd.geodataframe.GeoDataFrame)
+            and not xcol
+        ):
             xy_expected = pd.DataFrame(
                 data={
                     "x": [p.x for p in xy_expected.geometry],
@@ -862,8 +919,14 @@ class PlotTester(object):
             xcol, ycol = "x", "y"
 
         if xlabels:
+            if not xcol or not ycol:
+                raise ValueError("xcol and ycol must be specified when xlabels=True")
             self.assert_xlabel_ydata(xy_expected, xcol=xcol, ycol=ycol, message=message)
             return
+
+        if not xcol or not ycol:
+            raise ValueError("xcol and ycol must be specified")
+
         xy_data = self.get_xy(points_only=points_only)
 
         # Make sure the data are sorted the same
@@ -922,7 +985,13 @@ class PlotTester(object):
                 # xy_data and xy_expected do not have the same shape
                 raise ValueError("xy_data and xy_expected do not have the same shape")
 
-    def assert_xlabel_ydata(self, xy_expected, xcol, ycol, message="Incorrect Data"):
+    def assert_xlabel_ydata(
+        self,
+        xy_expected: pd.DataFrame,
+        xcol: str,
+        ycol: str,
+        message: str = "Incorrect Data",
+    ) -> None:
         """Asserts that the numbers in x labels and y values in Axes `ax` match
         `xy_expected`.
 
@@ -947,7 +1016,7 @@ class PlotTester(object):
         -----
         This is only testing the numbers in x-axis labels.
         """
-        x_data = [
+        x_data: list[str] = [
             "".join(c for c in label.get_text())
             for label in self.ax.xaxis.get_majorticklabels()
         ]
@@ -971,13 +1040,13 @@ class PlotTester(object):
                 # We attempt to convert numeric strings to numbers
                 try:
                     x_expected = [float(s) for s in xy_expected[xcol]]
-                    x_data = [float(s) for s in xy_data["x"]]
+                    x_data_float = [float(s) for s in xy_data["x"]]
                 except ValueError:
                     x_is_numeric = False
                 else:
                     x_is_numeric = True
                     xy_expected[xcol] = x_expected
-                    xy_data["x"] = x_data
+                    xy_data["x"] = x_data_float
             # We expect x-values to be non-numeric strings
             else:
                 x_is_numeric = False
@@ -1006,7 +1075,9 @@ class PlotTester(object):
 
     # LINE TESTS/HELPER FUNCTIONS
 
-    def get_slope_yintercept(self, path_verts):
+    def get_slope_yintercept(
+        self, path_verts: NDArray[np.float64]
+    ) -> tuple[float, float]:
         """Returns the y-intercept of line based on the average slope of the
         line
 
@@ -1032,12 +1103,12 @@ class PlotTester(object):
 
     def assert_line(
         self,
-        slope_exp,
-        intercept_exp,
-        check_coverage=True,
-        message_no_line="Expected line not displayed",
-        message_data="Line does not cover data set",
-    ):
+        slope_exp: float,
+        intercept_exp: float,
+        check_coverage: bool = True,
+        message_no_line: str = "Expected line not displayed",
+        message_data: str = "Line does not cover data set",
+    ) -> None:
         """Asserts that there exists a line on Axes `ax` with slope `slope_exp`
         and y-intercept `intercept_exp` and
 
@@ -1104,7 +1175,9 @@ class PlotTester(object):
         if check_coverage:
             assert flag_length, message_data
 
-    def assert_lines_of_type(self, line_types, check_coverage=True):
+    def assert_lines_of_type(
+        self, line_types: Union[str, list[str]], check_coverage: bool = True
+    ) -> None:
         """Asserts each line of type in `line_types` exist on `ax`
 
         Parameters
@@ -1132,6 +1205,11 @@ class PlotTester(object):
 
         for line_type in line_types:
             if line_type == "linear-regression":
+                if not HAS_SCIPY:
+                    raise ImportError(
+                        "scipy is required for linear-regression line checks. "
+                        "Install with: pip install matplotcheck2[timeseries]"
+                    )
                 xy = self.get_xy(points_only=True)
                 # Check that there is xy data for this line. Some one-to-one
                 # lines do not produce xy data.
@@ -1158,7 +1236,7 @@ class PlotTester(object):
 
     # HISTOGRAM FUNCTIONS
 
-    def get_num_bins(self):
+    def get_num_bins(self) -> int:
         """Gets the number of bins in histogram with a unique x-position.
 
         Returns
@@ -1177,9 +1255,9 @@ class PlotTester(object):
 
     def assert_num_bins(
         self,
-        num_bins,
-        message="Expected {0} bins in histogram, instead found {1}.",
-    ):
+        num_bins: int,
+        message: str = "Expected {0} bins in histogram, instead found {1}.",
+    ) -> None:
         """Asserts number of bins is `num_bins`.
 
         Parameters
@@ -1202,7 +1280,7 @@ class PlotTester(object):
 
         assert num_bins == num_bins_found, message.format(num_bins, num_bins_found)
 
-    def get_bin_values(self):
+    def get_bin_values(self) -> list[float]:
         """Returns the value of each bin in a histogram (i.e. the height of each
         bar in a histogram.)
 
@@ -1215,7 +1293,7 @@ class PlotTester(object):
 
         return bin_values
 
-    def get_bin_midpoints(self):
+    def get_bin_midpoints(self) -> list[float]:
         """Returns the mid point value of each bin in a histogram
 
         Returns
@@ -1229,10 +1307,10 @@ class PlotTester(object):
 
     def assert_bin_values(
         self,
-        bin_values,
-        tolerance=0,
-        message="Did not find expected bin values in plot",
-    ):
+        bin_values: list[float],
+        tolerance: float = 0,
+        message: str = "Did not find expected bin values in plot",
+    ) -> None:
         """Asserts that the values of histogram bins match `bin_values`.
 
         Parameters
@@ -1291,9 +1369,9 @@ class PlotTester(object):
 
     def assert_bin_midpoints(
         self,
-        bin_midpoints,
-        message="Did not find expected bin midpoints in plot",
-    ):
+        bin_midpoints: list[float],
+        message: str = "Did not find expected bin midpoints in plot",
+    ) -> None:
         """
         Asserts that the middle values of histogram bins match `bin_midpoints`.
 

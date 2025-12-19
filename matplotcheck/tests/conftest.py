@@ -9,6 +9,15 @@ from shapely.geometry import Polygon, LineString
 from matplotcheck.base import PlotTester
 
 
+def pytest_configure(config):
+    """Register custom markers."""
+    config.addinivalue_line(
+        "markers", "requires_geopandas: mark test as requiring geopandas"
+    )
+    config.addinivalue_line("markers", "requires_scipy: mark test as requiring scipy")
+    config.addinivalue_line("markers", "requires_folium: mark test as requiring folium")
+
+
 @pytest.fixture
 def pd_df():
     """Create a pandas dataframe for testing"""

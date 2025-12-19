@@ -56,6 +56,8 @@ sphinx_gallery_conf = {
     "examples_dirs": "../examples",
     # path where to save gallery generated examples
     "gallery_dirs": "gallery_vignettes",
+    # Only raise exception on unexpected failures, not known flaky examples
+    "only_warn_on_example_error": True,
 }
 
 # Show the source code for any plots in the documentation by default

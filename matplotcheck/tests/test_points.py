@@ -9,6 +9,8 @@ import geopandas as gpd
 
 from matplotcheck.vector import VectorTester
 
+pytestmark = pytest.mark.requires_geopandas
+
 matplotlib.use("Agg")
 
 

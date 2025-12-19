@@ -5,8 +5,6 @@ import pandas as pd
 import seaborn as sns
 from scipy import stats
 
-pytestmark = pytest.mark.requires_scipy
-
 """Fixtures"""
 
 
@@ -99,6 +97,7 @@ def pt_one2one_reg(pd_df_reg_one2one_data):
     return PlotTester(ax)
 
 
+@pytest.mark.requires_scipy
 def test_reg_plot(pd_df_reg_data, pt_reg_data):
     """Test that assert_line() correctly passes when given the correct slope
     and intercept."""
@@ -110,6 +109,7 @@ def test_reg_plot(pd_df_reg_data, pt_reg_data):
     pt_reg_data.assert_line(slope_exp, intercept_exp)
 
 
+@pytest.mark.requires_scipy
 def test_reg_plot_slope_fails(pd_df_reg_data, pt_reg_data):
     """Check that assert_line() correctly falis when given an incorrect
     slope."""
@@ -118,6 +118,7 @@ def test_reg_plot_slope_fails(pd_df_reg_data, pt_reg_data):
         pt_reg_data.assert_line(1, intercept_exp)
 
 
+@pytest.mark.requires_scipy
 def test_reg_plot_intercept_fails(pd_df_reg_data, pt_reg_data):
     """Check that assert_line() correctly fails when given an incorrect
     intercept"""
@@ -127,6 +128,7 @@ def test_reg_plot_intercept_fails(pd_df_reg_data, pt_reg_data):
         pt_reg_data.assert_line(slope_exp, 1)
 
 
+@pytest.mark.requires_scipy
 def test_line_type_reg(pt_reg_data):
     """Check that assert_lines_of_type() correctly passes when checking for a
     linear-regression line."""
@@ -139,6 +141,7 @@ def test_line_type_one2one(pt_one2one):
     pt_one2one.assert_lines_of_type("onetoone", check_coverage=False)
 
 
+@pytest.mark.requires_scipy
 def test_line_type_reg_one2one(pt_reg_one2one):
     """Check that assert_lines_of_type() correctly passes when checking for
     both a linear-regression line and a one-to-one line."""
@@ -147,6 +150,7 @@ def test_line_type_reg_one2one(pt_reg_one2one):
     )
 
 
+@pytest.mark.requires_scipy
 def test_line_type_reg_fails(pt_one2one):
     """Check that assert_lines_of_type() correctly fails when checking for a
     linear-regression line, but one does not exist."""
@@ -163,6 +167,7 @@ def test_line_type_one2one_fails(pt_reg_data):
         pt_reg_data.assert_lines_of_type("onetoone")
 
 
+@pytest.mark.requires_scipy
 def test_multi_reg_plot_line_fails(pt_multiple_reg):
     """Check that multiple regression lines fails when the not all points are
     used to make the regression lines."""
@@ -172,6 +177,7 @@ def test_multi_reg_plot_line_fails(pt_multiple_reg):
         pt_multiple_reg.assert_lines_of_type("linear-regression")
 
 
+@pytest.mark.requires_scipy
 def test_reg_one2one_fails(pt_one2one_reg):
     """Testing that a regression line that doesn't cover all the points in a
     plot fails."""
@@ -181,6 +187,7 @@ def test_reg_one2one_fails(pt_one2one_reg):
         pt_one2one_reg.assert_lines_of_type("linear-regression")
 
 
+@pytest.mark.requires_scipy
 def test_reg_one2one_passes_close_lims(pt_one2one_reg_close):
     """Testing that a regression line that is slightly out of coverage still
     passes."""

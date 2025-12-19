@@ -37,6 +37,22 @@ To use pip run:
 pip install --upgrade matplotcheck2
 ```
 
+For additional functionality, you can install optional dependencies:
+
+```sh
+# For spatial/vector plotting checks (geopandas, shapely)
+pip install matplotcheck2[spatial]
+
+# For time series plotting checks with regression lines (scipy, python-dateutil)
+pip install matplotcheck2[timeseries]
+
+# For folium map checks
+pip install matplotcheck2[folium]
+
+# Install all optional dependencies
+pip install matplotcheck2[all]
+```
+
 > [!NOTE]  
 > This fork takes over the original matplotcheck package. The original package is no longer maintained and will not be updated. See <https://github.com/earthlab/matplotcheck/pull/429>
 

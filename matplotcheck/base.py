@@ -11,9 +11,8 @@ from __future__ import annotations
 
 import math
 import numbers
-from typing import Any, Union, Optional
+from typing import Any, Union, Optional, TYPE_CHECKING
 
-import geopandas as gpd
 import matplotlib
 import matplotlib.axes
 import matplotlib.legend
@@ -22,7 +21,23 @@ import numpy as np
 import pandas as pd
 from matplotlib.backend_bases import RendererBase
 from numpy.typing import NDArray
-from scipy import stats
+
+# Optional imports
+try:
+    import geopandas as gpd
+    HAS_GEOPANDAS = True
+except ImportError:
+    HAS_GEOPANDAS = False
+    if TYPE_CHECKING:
+        import geopandas as gpd
+
+try:
+    from scipy import stats
+    HAS_SCIPY = True
+except ImportError:
+    HAS_SCIPY = False
+    if TYPE_CHECKING:
+        from scipy import stats
 
 
 class InvalidPlotError(Exception):
@@ -906,7 +921,7 @@ class PlotTester(object):
         # If xy_expected is a GeoDataFrame, then we make is a normal DataFrame
         # with the coordinates of the geometry in that GeoDataFrame as the x
         # and y data
-        if isinstance(xy_expected, gpd.geodataframe.GeoDataFrame) and not xcol:
+        if HAS_GEOPANDAS and isinstance(xy_expected, gpd.geodataframe.GeoDataFrame) and not xcol:
             xy_expected = pd.DataFrame(
                 data={
                     "x": [p.x for p in xy_expected.geometry],
@@ -1208,6 +1223,11 @@ class PlotTester(object):
 
         for line_type in line_types:
             if line_type == "linear-regression":
+                if not HAS_SCIPY:
+                    raise ImportError(
+                        "scipy is required for linear-regression line checks. "
+                        "Install with: pip install matplotcheck2[timeseries]"
+                    )
                 xy = self.get_xy(points_only=True)
                 # Check that there is xy data for this line. Some one-to-one
                 # lines do not produce xy data.

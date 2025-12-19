@@ -1,0 +1,46 @@
+# This workflow tests the package with minimal dependencies only
+
+name: Test Minimal Dependencies
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  test-minimal:
+    name: Minimal deps (${{ matrix.python-version }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "windows-latest", "macos-latest"]
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@master
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install project with minimal dependencies
+        run: uv sync --no-dev --no-group dev
+      - name: Verify core imports work
+        run: |
+          uv run python -c "from matplotcheck.base import PlotTester; print('✓ Core imports successful')"
+      - name: Install test dependencies only
+        run: uv pip install pytest
+      - name: Run core tests (excluding optional dependency tests)
+        run: |
+          uv run pytest matplotcheck/tests/test_base.py -v -k "not scatter"
+          uv run pytest matplotcheck/tests/test_base_axis.py -v
+          uv run pytest matplotcheck/tests/test_base_data.py -v
+          uv run pytest matplotcheck/tests/test_base_legends.py -v
+          uv run pytest matplotcheck/tests/test_base_titles_captions.py -v

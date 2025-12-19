@@ -4,6 +4,8 @@ import pandas as pd
 import pytest
 from matplotcheck.timeseries import TimeSeriesTester
 
+pytestmark = pytest.mark.requires_scipy
+
 
 @pytest.fixture
 def pd_df_timeseries():

@@ -8,6 +8,8 @@ from shapely.geometry import Polygon
 
 from matplotcheck.vector import VectorTester
 
+pytestmark = pytest.mark.requires_geopandas
+
 matplotlib.use("Agg")
 
 

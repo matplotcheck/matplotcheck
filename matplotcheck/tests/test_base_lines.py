@@ -5,6 +5,8 @@ import pandas as pd
 import seaborn as sns
 from scipy import stats
 
+pytestmark = pytest.mark.requires_scipy
+
 """Fixtures"""
 
 

@@ -32,15 +32,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install project with minimal dependencies
         run: uv sync --no-dev --no-group dev
-      - name: Verify core imports work
-        run: |
-          uv run python -c "from matplotcheck.base import PlotTester; print('✓ Core imports successful')"
-      - name: Install test dependencies only
-        run: uv pip install pytest
-      - name: Run core tests (excluding optional dependency tests)
-        run: |
-          uv run pytest matplotcheck/tests/test_base.py -v -k "not scatter"
-          uv run pytest matplotcheck/tests/test_base_axis.py -v
-          uv run pytest matplotcheck/tests/test_base_data.py -v
-          uv run pytest matplotcheck/tests/test_base_legends.py -v
-          uv run pytest matplotcheck/tests/test_base_titles_captions.py -v
+    - name: Install test dependencies only
+      run: uv pip install pytest
+    - name: Run tests excluding optional dependencies
+      run: |
+        uv run pytest matplotcheck/tests -v -m "not requires_geopandas and not requires_scipy and not requires_folium"

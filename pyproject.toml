@@ -9,12 +9,8 @@ readme = "README.md"
 requires-python = ">=3.10"
 
 description = "Functions to check Matplotlib plot outputs"
-authors = [
-    {name = "Leah Wasser", email = "leah.wasser@colorado.edu"},
-]
-maintainers = [
-    {name = "Pete Stenger", email = "pete@stenger.io"},
-]
+authors = [{ name = "Leah Wasser", email = "leah.wasser@colorado.edu" }]
+maintainers = [{ name = "Pete Stenger", email = "pete@stenger.io" }]
 dependencies = [
     "folium>=0.19.5",
     "geopandas>=1.0.1",
@@ -22,7 +18,7 @@ dependencies = [
     "numpy>=2.2.3",
     "scipy>=1.15.2",
 ]
-classifiers=[
+classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: BSD License",
     "Programming Language :: Python",
@@ -50,9 +46,14 @@ docs = [
 [tool.black]
 line-length = 79
 
+[tool.setuptools.package-data]
+matplotcheck = ["py.typed"]
+
 [dependency-groups]
 dev = [
     "furo>=2024.8.6",
+    "mypy>=1.0.0",
+    "pandas-stubs>=2.0.0",
     "pytest>=7.0.1",
     "pytest-cov>=6.0.0",
     "ruff>=0.10.0",

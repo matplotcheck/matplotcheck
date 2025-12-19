@@ -14,12 +14,8 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "requires_geopandas: mark test as requiring geopandas"
     )
-    config.addinivalue_line(
-        "markers", "requires_scipy: mark test as requiring scipy"
-    )
-    config.addinivalue_line(
-        "markers", "requires_folium: mark test as requiring folium"
-    )
+    config.addinivalue_line("markers", "requires_scipy: mark test as requiring scipy")
+    config.addinivalue_line("markers", "requires_folium: mark test as requiring folium")
 
 
 @pytest.fixture

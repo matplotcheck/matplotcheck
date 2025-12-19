@@ -11,7 +11,7 @@ requires-python = ">=3.10"
 description = "Functions to check Matplotlib plot outputs"
 authors = [{ name = "Leah Wasser", email = "leah.wasser@colorado.edu" }]
 maintainers = [{ name = "Pete Stenger", email = "pete@stenger.io" }]
-dependencies = ["matplotlib>=3.10.1", "numpy>=2.2.3", "pandas>=2.0.0"]
+dependencies = ["matplotlib>=3.10.1", "numpy>=2.0.0", "pandas>=2.0.0"]
 classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: BSD License",

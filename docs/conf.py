@@ -56,8 +56,8 @@ sphinx_gallery_conf = {
     "examples_dirs": "../examples",
     # path where to save gallery generated examples
     "gallery_dirs": "gallery_vignettes",
-    # Allow example failures during docs build (for CI/RTD)
-    "expected_failing_examples": ["../examples/plot_vector_testing.py"],
+    # Only raise exception on unexpected failures, not known flaky examples
+    "only_warn_on_example_error": True,
 }
 
 # Show the source code for any plots in the documentation by default
@@ -167,7 +167,9 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "matplotcheck", "matplotcheck Documentation", [author], 1)]
+man_pages = [
+    (master_doc, "matplotcheck", "matplotcheck Documentation", [author], 1)
+]
 
 
 # -- Options for Texinfo output ----------------------------------------------

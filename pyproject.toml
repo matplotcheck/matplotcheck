@@ -4,13 +4,16 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "matplotcheck2"
-version = "0.2.0"
+version = "0.2.1"
 readme = "README.md"
 requires-python = ">=3.10"
 
 description = "Functions to check Matplotlib plot outputs"
 authors = [{ name = "Leah Wasser", email = "leah.wasser@colorado.edu" }]
-maintainers = [{ name = "Pete Stenger", email = "pete@stenger.io" }]
+maintainers = [
+    { name = "Pete Stenger", email = "pete@stenger.io" },
+    { name = "Eliot Robson", email = "eliot.robson24@gmail.com" },
+]
 dependencies = ["matplotlib>=3.10.1", "numpy>=2.0.0", "pandas>=2.0.0"]
 classifiers = [
     "Intended Audience :: Developers",

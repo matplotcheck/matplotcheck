@@ -49,12 +49,12 @@ class RasterTester(VectorTester):
 
         # Check that colorbar range matches expected crange
         if crange:
-            assert cb[0].vmin == crange[0], (
-                "Colorbar minimum is not expected value:{0}".format(crange[0])
-            )
-            assert cb[0].vmax == crange[1], (
-                "Colorbar maximum is not expected value:{0}".format(crange[1])
-            )
+            assert (
+                cb[0].vmin == crange[0]
+            ), "Colorbar minimum is not expected value:{0}".format(crange[0])
+            assert (
+                cb[0].vmax == crange[1]
+            ), "Colorbar maximum is not expected value:{0}".format(crange[1])
 
     def _which_label(self, label, all_label_options):
         """Helper function for assert_legend_accuracy_classified_image
@@ -148,9 +148,9 @@ class RasterTester(VectorTester):
         ]
 
         # Check that expected and actual labels match up
-        assert np.array_equal(im_data_labels, im_expected_labels), (
-            "Incorrect legend to data relation"
-        )
+        assert np.array_equal(
+            im_data_labels, im_expected_labels
+        ), "Incorrect legend to data relation"
 
         # IMAGE TESTS/HELPER FUNCTIONS
 

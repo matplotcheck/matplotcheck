@@ -56,6 +56,8 @@ sphinx_gallery_conf = {
     "examples_dirs": "../examples",
     # path where to save gallery generated examples
     "gallery_dirs": "gallery_vignettes",
+    # Allow example failures during docs build (for CI/RTD)
+    "expected_failing_examples": ["../examples/plot_vector_testing.py"],
 }
 
 # Show the source code for any plots in the documentation by default

@@ -480,6 +480,42 @@ class VectorTester(PlotTester):
 
     """ Check Polygons """
 
+    def _normalize_polygon_ring(self, coords):
+        """Normalize a polygon ring to start from the lexicographically smallest
+        coordinate. This ensures consistent comparison regardless of which vertex
+        the ring starts from.
+
+        Parameters
+        ----------
+        coords: list of tuples
+            List of coordinate tuples representing a polygon ring. The first and
+            last coordinates should be the same (closed ring).
+
+        Returns
+        -------
+        list of tuples: Normalized coordinate list starting from the smallest
+        coordinate.
+        """
+        if len(coords) < 2:
+            return coords
+
+        # Remove closing point for rotation (polygon rings repeat the first point)
+        ring = coords[:-1] if coords[0] == coords[-1] else coords
+
+        if len(ring) == 0:
+            return coords
+
+        # Find the index of the lexicographically smallest coordinate
+        min_idx = min(range(len(ring)), key=lambda i: ring[i])
+
+        # Rotate the ring to start from the smallest coordinate
+        rotated = ring[min_idx:] + ring[:min_idx]
+
+        # Add the closing point back
+        rotated.append(rotated[0])
+
+        return rotated
+
     def get_polygons(self):
         """Returns all polygons on Axes ax as a sorted list of polygons where
         each polygon is a list of coord tuples
@@ -490,7 +526,7 @@ class VectorTester(PlotTester):
         tuple is a coordinate.
         """
         output = [
-            [tuple(coords) for coords in path.vertices]
+            self._normalize_polygon_ring([tuple(coords) for coords in path.vertices])
             for c in self.ax.collections
             if isinstance(c, matplotlib.collections.PatchCollection)
             for path in c.get_paths()
@@ -516,9 +552,9 @@ class VectorTester(PlotTester):
         for entry in series:
             if isinstance(entry, shapely.geometry.multipolygon.MultiPolygon):
                 for poly in entry:
-                    output += [list(poly.exterior.coords)]
+                    output += [self._normalize_polygon_ring(list(poly.exterior.coords))]
             if isinstance(entry, shapely.geometry.polygon.Polygon):
-                output += [list(entry.exterior.coords)]
+                output += [self._normalize_polygon_ring(list(entry.exterior.coords))]
         return output
 
     def assert_polygons(self, polygons_expected, dec=None, m="Incorrect Polygon Data"):
